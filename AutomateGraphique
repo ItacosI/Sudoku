@@ -1,0 +1,59 @@
+open Graphics;;
+
+type grille = bool array array;;
+type etat = { up : bool; down: bool; right : bool; left : bool }
+let () = Random.self_init ();;
+
+
+(* question 1 *)
+let creation n =
+  Array.make_matrix n n false;;
+
+(* let g = creation 5;; *)
+
+(* question 2 *)
+let init_centre g =
+  let length = Array.length g in g.((length)/2).((length)/2) <- true;;
+
+(* init_centre g;; *)
+
+
+(* question 2 *)
+let init_aleatoire p g =
+  let length = Array.length g in
+  for i = 0 to length-1 do
+      for j = 0 to length-1 do
+        g.(i).(j) <- (Random.int 100 <= p )
+      done
+  done;;
+
+(* question 3 *)
+
+let affichage g =
+  open_graph " 600x600";
+
+  let length = Array.length g in
+  set_color black;
+  fill_rect 0 0 length length;
+  set_color green;
+    for i = 0 to length - 1 do
+      for j = 0 to length - 1 do
+        match g.(i).(j) with
+        | true -> plot i j
+        | false -> ()
+      done
+    done;;
+
+
+let voisines g i j =
+    let length = Array.length g in
+    match i with
+
+
+
+let g = creation 600;;
+init_aleatoire 25 g;;
+affichage g;;
+
+(* let _ = read_key () *)
+let () = ignore (read_key ())
