@@ -58,6 +58,17 @@ let testLig ma i j va =
 
 (*teste si un valeur est bonne dans une case *)
   let test ma i j va = cadre ma i j va && testLig ma i j va && testCol ma i j va
+  
+  
+  (*Test la grille finale *)
+  let testFinal ma =
+    let res = ref true in
+    for i = 0 to 9 do
+      for j = 0 to 9 do
+        res := (!res && test ma i j ma.(i).(j))
+      done
+    done ; !res
+  
 
   let transfo s =
     let table = Array.make_matrix 9 9 0 in
