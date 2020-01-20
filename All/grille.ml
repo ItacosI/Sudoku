@@ -38,3 +38,12 @@ maJ -> matrice du joueur
 maS -> matrice solution 
 i , j -> coordonnée de la case a tester*)
 let testSiNombreCorrect maJ maS i j = if maJ.(i).(j) == maS.(i).(j) then true else false
+
+
+
+
+(*Met un nombre correcte dans la case de la matrice du joueur
+maJ -> matrice du joueur
+maS -> matrice solution 
+i , j -> coordonnée de la case a tester*)
+let aideJoueurSurUneCaseDonnee maJ maS i j = maJ.(i).(j) <- maS.(i).(j) 
