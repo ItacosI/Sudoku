@@ -47,3 +47,13 @@ cliquer sur un chiffre surligne ce chiffre partout dans la grille</li>
   <li> [ ] Un jeu complet : le jeu est composé de plusieurs niveaux, s'enchaînant les uns avec les autres. Il y a une logique de jeu (score pour chaque niveau etc)</li>
   <li> [ ] Vous êtes libres de rajouter d'autres fonctionnalités dans votre jeu tant que vous les expliquez dans le rapport</li>
 </ul>
+
+
+# Notes
+
+
+1er mode : Méthode création aléatoire de grille sans système de vie avec retour en arrière, et vérification seulement si les règles du jeu sont respectées. En revanche, rien ne nous dit si la grille est faisable ou non. (voir avec sat solver)
+
+2ème mode : Méthode avec système de vie et vérification avec la grille de solution à chaque fois que l'on souhaite placer un nombre. Dans ce mode, il y aura un mode de vie et pas de retour en arrière
+
+3ème mode : Méthode sans système de vie avec retour en arrière et vérification avec la grille de solution seulement à la fin quand la grille sera complètement remplie, à ce moment-là le système nous dira si la grille de sudoku est correcte ou non avec l'aide de la correction.
