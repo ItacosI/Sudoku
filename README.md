@@ -68,7 +68,7 @@ cliquer sur un chiffre surligne ce chiffre partout dans la grille</li>
 
 
 
-#MakeFile
+# MakeFile
 
 
 all: sudoku.native
