@@ -57,3 +57,26 @@ cliquer sur un chiffre surligne ce chiffre partout dans la grille</li>
 2ème mode : Méthode avec système de vie et vérification avec la grille de solution à chaque fois que l'on souhaite placer un nombre. Dans ce mode, il y aura un mode de vie et pas de retour en arrière
 
 3ème mode : Méthode sans système de vie avec retour en arrière et vérification avec la grille de solution seulement à la fin quand la grille sera complètement remplie, à ce moment-là le système nous dira si la grille de sudoku est correcte ou non avec l'aide de la correction.
+
+
+
+
+
+
+
+
+
+
+
+#MakeFile
+
+
+all: sudoku.native
+
+%.native: *.ml
+	ocamlbuild -use-ocamlfind -pkg graphics $@
+
+.PHONY: clean
+
+clean:
+	ocamlbuild -clean
