@@ -26,15 +26,15 @@ let menuDebut =
 	fill_rect 540 202 20 20;
 	Graphics.draw_string "ENTREE"
 	;;
-
 let reponseJ =
 	let b = ref true in
 	while !b do
 	 let s = Graphics.wait_next_event [Graphics.Button_down]
 		in match s.Graphics.mouse_y with
-			|a when s.Graphics.mouse_y > 490 && s.Graphics.mouse_y < 520 -> if s.Graphics.mouse_x > 890 && s.Graphics.mouse_x < 910  then begin Graphics.moveto 900 500; let key = read_key () in Graphics.draw_char key end
-			|b when s.Graphics.mouse_y > 390 && s.Graphics.mouse_y < 420 -> if s.Graphics.mouse_x > 690 && s.Graphics.mouse_x < 720  then begin Graphics.moveto 710 400; let key = read_key () in Graphics.draw_char key end
-			|c when s.Graphics.mouse_y > 150 && s.Graphics.mouse_y < 250 -> if s.Graphics.mouse_x > 500 && s.Graphics.mouse_x < 800 then begin Graphics.clear_graph(); b:= false end
+			|a when s.Graphics.mouse_y > 250 && s.Graphics.mouse_y < 275 -> if s.Graphics.mouse_x > 700 && s.Graphics.mouse_x < 900  then begin Graphics.moveto 800 260; let key = read_key () in Graphics.draw_char key end
+			|b when s.Graphics.mouse_y > 325 && s.Graphics.mouse_y < 375 -> if s.Graphics.mouse_x > 700 && s.Graphics.mouse_x < 800  then begin Graphics.moveto 750 350; let key = read_key () in Graphics.draw_char key end
+			|c when s.Graphics.mouse_y > 425 && s.Graphics.mouse_y < 475 -> if s.Graphics.mouse_x > 700 && s.Graphics.mouse_x < 800 then begin Graphics.moveto 750 450; let key = read_key () in Graphics.draw_char key end
+			|d when s.Graphics.mouse_y > 445 && s.Graphics.mouse_y < 495 -> if s.Graphics.mouse_x > 540 && s.Graphics.mouse_x < 740 then begin Graphics.clear_graph(); b:= false end
 			|_ -> ();
 		done
 	;;
