@@ -10,51 +10,6 @@ let dessineMenu =
 	Graphics.fill_arc 640 0 350 50 0 180;;
 
 
-	(*
-	let dessineRegion x y =
-		Graphics.set_color black;
-		for i = 0 to 8 do
-			Graphics.fill_rect (x+(i mod 3)*55) (y+(i/3)*55) 53 53;
-		done;;
-
-	let dessineGrille =
-			for i = 0 to 8 do
-				dessineRegion (100+(i mod 3)*3+(i mod 3)*165) (100+(i/3)*3+(i/3)*165);
-			done;;
-	*)
-
-
-(*
-let dessineNb case valeur =
-	Graphics.set_text_size 50;
-	Graphics.set_font "-*-fixed-medium-r-*--24-*-*-*-*-*-iso8859-1";
-	Graphics.set_color (rgb 0 255 0);
-
-	Printf.printf "x: %d  y: %d" (100 + (case mod 9)*55 + ((case mod 9)/3)*3) (546 - (case/9)*55 - (case/27)*3);
-	Graphics.moveto (120 + (case mod 9)*55 + ((case mod 9)/3)*3) (560 - (case/9)*55 - (case/27)*3);
-
-if ((int_of_char (valeur)-48) != 0) then begin
-
-  Graphics.draw_string (String.make 1 valeur) ;
-end
-else
-  begin
-    (* Graphics.draw_string (String.make 1 '9') ; *)
-  end
-;;
-
-let grillesudokuB = "807000003602080000000200900040005001000798000200100070004003000000040108300000506";;
-
-
-
-let dessineSudoku grille =
-
-for i = 0 to 80 do
-	dessineNb i grille.[i];
-done;;
-
-*)
-
 
 
 let menuDebut =
@@ -71,7 +26,8 @@ let menuDebut =
 	Graphics.draw_string ".";
 	Graphics.moveto 450 200;
 	fill_rect 540 202 20 20;
-	Graphics.draw_string "ENTREE";;
+	Graphics.draw_string "ENTREE"
+	;;
 
 	let reponseJ =
 	let b = ref true in
@@ -80,34 +36,65 @@ let menuDebut =
 			in match s.Graphics.mouse_y with
 				|a when s.Graphics.mouse_y > 490 && s.Graphics.mouse_y < 520 -> if s.Graphics.mouse_x > 890 && s.Graphics.mouse_x < 910  then begin Graphics.moveto 900 500; Graphics.draw_char s.Graphics.key ; Printf.printf"%c" s.Graphics.key end
 				|b when s.Graphics.mouse_y > 390 && s.Graphics.mouse_y < 420 -> if s.Graphics.mouse_x > 690 && s.Graphics.mouse_x < 720  then begin Graphics.moveto 472 400; Graphics.draw_char s.Graphics.key ; Printf.printf"%c" s.Graphics.key end
-				|c when s.Graphics.mouse_y > 160 && s.Graphics.mouse_y < 210 -> if s.Graphics.mouse_x > 440 && s.Graphics.mouse_x < 500 then b:= false;
+				|c when s.Graphics.mouse_y > 150 && s.Graphics.mouse_y < 250 -> if s.Graphics.mouse_x > 500 && s.Graphics.mouse_x < 800 then b:= false;
 			done
+		;;
 
 
-			(*
-			let reponseJ =
-			let b = ref true in
-				while !b do
-			 	let s = Graphics.wait_next_event [Graphics.Button_down]
-					in match mouse_pos () with
-						| (a,b) with a < 950 && a > 890 && b > 490 && b < 520 -> begin Graphics.moveto 900 500 ; Graphics.draw_char s.Graphics.key end
-						| (a,b) with a < 750 && a > 690 && b > 390 && b < 450 -> begin Graphics.moveto 472 400 ; Graphics.draw_char s.Graphics.key end
-						| (a,b) with a < 600 && a > 530 && b > 200 && b < 150 ->  b:= false;
-						|_ -> ()
-					done
-				*)
-;;
+		let dessineRegion x y =
+				Graphics.set_color black;
+				for i = 0 to 8 do
+					Graphics.fill_rect (x+(i mod 3)*55) (y+(i/3)*55) 53 53;
+				done;;
+
+		let dessineGrille =
+				for i = 0 to 8 do
+					dessineRegion (100+(i mod 3)*3+(i mod 3)*165) (100+(i/3)*3+(i/3)*165);
+				done;;
+
+		let dessineNb case valeur =
+			  Graphics.set_text_size 50;
+				Graphics.set_font "-*-fixed-medium-r-*--24-*-*-*-*-*-iso8859-1";
+				Graphics.set_color (rgb 0 255 0);
+
+				Printf.printf "x: %d  y: %d" (100 + (case mod 9)*55 + ((case mod 9)/3)*3) (546 - (case/9)*55 - (case/27)*3);
+				Graphics.moveto (120 + (case mod 9)*55 + ((case mod 9)/3)*3) (560 - (case/9)*55 - (case/27)*3);
+
+			if ((int_of_char (valeur)-48) != 0) then begin
+
+			  Graphics.draw_string (String.make 1 valeur) ;
+			end
+			else
+			  begin
+			    (* Graphics.draw_string (String.make 1 '9') ; *)
+			  end
+			;;
+
+			let grillesudokuB = "807000003602080000000200900040005001000798000200100070004003000000040108300000506";;
 
 
 
-(*
+			let dessineSudoku grille =
+
+			for i = 0 to 80 do
+				dessineNb i grille.[i];
+			done;;
+
+
+
+
+
+
+
+
+
+
 dessineGrille;;
 dessineMenu;;
 dessineSudoku grillesudokuB;;
-*)
+
 Printf.printf "%d" Graphics.foreground;
-(*
+
 while true do
 	1;
 done;;
-*)
