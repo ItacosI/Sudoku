@@ -50,7 +50,7 @@ while !b do
   in match s.Graphics.mouse_y with
   |a when s.Graphics.mouse_y > 490 && s.Graphics.mouse_y < 520 -> if s.Graphics.mouse_x > 890 && s.Graphics.mouse_x < 910  then begin Graphics.moveto 900 500; let key = read_key () in if key = 'q' then raise Exit ; Graphics.draw_char key end
   |b when s.Graphics.mouse_y > 390 && s.Graphics.mouse_y < 420 -> if s.Graphics.mouse_x > 690 && s.Graphics.mouse_x < 720  then begin Graphics.moveto 472 400; let key = read_key () in if key = 'q' then raise Exit ; Graphics.draw_char key end
-  |c when s.Graphics.mouse_y > 150 && s.Graphics.mouse_y < 250 -> if s.Graphics.mouse_x > 500 && s.Graphics.mouse_x < 800 then b:= false;
+  |c when s.Graphics.mouse_y > 150 && s.Graphics.mouse_y < 250 -> if s.Graphics.mouse_x > 500 && s.Graphics.mouse_x < 800 then begin Graphics.clear_graph(); b:= false end 
   | _ -> ();
 done
 ;;
