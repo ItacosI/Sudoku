@@ -41,7 +41,9 @@ let lecturesolution i =
   input_line c;;
 
 let lecturegrid i =
-  let l5 = String.concat "" ["grids/grid"; string_of_int i; ".txt"] in
+  (* let l5 = String.concat "" ["grids/grid"; string_of_int i; ".txt"] in *)
+  let l5 = "grids/grid" ^ (string_of_int (i)) ^ ".txt" in
+
   let c = open_in l5 in
   input_line c;;
 
