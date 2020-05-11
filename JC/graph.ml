@@ -29,6 +29,31 @@ Graphics.draw_string "Difficulte (0 - 40) : ";
 Graphics.moveto 707 400;
 Graphics.moveto 450 200;
 fill_rect 540 202 20 20;
+  let bool = ref true in
+  let arraygrilleJ = ref (getarrayfromgrille !grillesudokuB) in
+  let arraygrilleSol = getarrayfromgrille !grillesudokuSol in
+  let arraycasex = getarraycasex true in
+  let arraycasey = getarraycasey true in
+  let staticarraygrille = (Array.copy !arraygrilleJ) in
+  let tempretourarriere = ref (Array.copy !arraygrilleJ) in
+  let tempgrilleretourarriere = ref (Sudoku.lecturegrid (int_of_string(!numerogrille))) in
+
+
+  while !bool do
+    let reponseJ = Graphics.wait_next_event [Graphics.Button_down] in
+    let key = read_key () in if (testkeyrange key) then
+      (var := getCaseCoord reponseJ.Graphics.mouse_x reponseJ.Graphics.mouse_y arraycasex arraycasey; messagevie true;
+       if !var = -1 then () else if((staticarraygrille.(!var) = 0) && !arraygrilleJ.(!var) != 0 ) then () else if (staticarraygrille.(!var)!= 0) then () else ( if (arraygrilleSol.(!var) = (int_of_char(key)-48) )
+                                                                                                                                                                then ( tempretourarriere := Array.copy !arraygrilleJ; !arraygrilleJ.(!var) <- (int_of_char(key)-48);(dessineNb (!var) key))
+                                                                                                                                                                else (  (Sudoku.vie := !Sudoku.vie -1) ;clearmenuscore true;messagevie true; if !Sudoku.vie = 0 then (bool := false ;Sudoku.vie := 10; messageperdant true)));
+       if (!arraygrilleJ = arraygrilleSol) then (bool := false ;Sudoku.vie := 10; messagegagnant true ) else () )
+    else
+
+
+
+      (if (key ='e') then ( if ((!arraygrilleJ = staticarraygrille) || (!arraygrilleJ = !tempretourarriere)) then () else ((arraygrilleJ := Array.copy !tempretourarriere;getgrillefromarray !tempgrilleretourarriere !arraygrilleJ ;Graphics.clear_graph();lancerprog !tempgrilleretourarriere)))  else ());
+  done ;;
+
 Graphics.draw_string "ENTREE"
 ;;*)
   if(bool = true) then
@@ -41,7 +66,32 @@ let numerogrille = ref "";;
 let numerodifficultejeu = ref "";;
 
 
-(* Fonction permettant de tester si les entrées au clavier sont bien des chiffres, pas de 0 pour pas positionner de 0 dans la grille *)
+(* Fonction permettant de tester si les entrées au clavier sont 
+   let bool = ref true in
+   let arraygrilleJ = ref (getarrayfromgrille !grillesudokuB) in
+   let arraygrilleSol = getarrayfromgrille !grillesudokuSol in
+   let arraycasex = getarraycasex true in
+   let arraycasey = getarraycasey true in
+   let staticarraygrille = (Array.copy !arraygrilleJ) in
+   let tempretourarriere = ref (Array.copy !arraygrilleJ) in
+   let tempgrilleretourarriere = ref (Sudoku.lecturegrid (int_of_string(!numerogrille))) in
+
+
+   while !bool do
+    let reponseJ = Graphics.wait_next_event [Graphics.Button_down] in
+    let key = read_key () in if (testkeyrange key) then
+      (var := getCaseCoord reponseJ.Graphics.mouse_x reponseJ.Graphics.mouse_y arraycasex arraycasey; messagevie true;
+       if !var = -1 then () else if((staticarraygrille.(!var) = 0) && !arraygrilleJ.(!var) != 0 ) then () else if (staticarraygrille.(!var)!= 0) then () else ( if (arraygrilleSol.(!var) = (int_of_char(key)-48) )
+                                                                                                                                                                then ( tempretourarriere := Array.copy !arraygrilleJ; !arraygrilleJ.(!var) <- (int_of_char(key)-48);(dessineNb (!var) key))
+                                                                                                                                                                else (  (Sudoku.vie := !Sudoku.vie -1) ;clearmenuscore true;messagevie true; if !Sudoku.vie = 0 then (bool := false ;Sudoku.vie := 10; messageperdant true)));
+       if (!arraygrilleJ = arraygrilleSol) then (bool := false ;Sudoku.vie := 10; messagegagnant true ) else () )
+    else
+
+
+
+      (if (key ='e') then ( if ((!arraygrilleJ = staticarraygrille) || (!arraygrilleJ = !tempretourarriere)) then () else ((arraygrilleJ := Array.copy !tempretourarriere;getgrillefromarray !tempgrilleretourarriere !arraygrilleJ ;Graphics.clear_graph();lancerprog !tempgrilleretourarriere)))  else ());
+   done ;;
+   bien des chiffres, pas de 0 pour pas positionner de 0 dans la grille *)
 let testkeyrange key =
   if(key ='1' || key ='2' ||key ='3' ||key ='4' ||key ='5' ||key ='6' ||key ='7' ||key ='8' || key ='9') then true else false;;
 
@@ -55,7 +105,7 @@ let reponseJ bool=
     let nbDiffuculte = ref 2 in
     let u = ref 720 in
     let v = ref 720 in
-    let w =  ref 720 in 
+    let w =  ref 720 in
     while !ba do
       let s = Graphics.wait_next_event [Graphics.Button_down]
       in match s.Graphics.mouse_y with
@@ -64,7 +114,7 @@ let reponseJ bool=
             while !nbNom > 0 do
               begin
                 Graphics.moveto !u 460; nbNom := (!nbNom - 1) ;
-                let key = read_key () in if int_of_char(key) = 13 then nbNom := 0 else ( Graphics.set_font "-*-fixed-medium-r-*--15-*-*-*-*-*-iso8859-1";Graphics.set_color (rgb 0 0 0);Graphics.draw_char key ; u:=!u +15; 
+                let key = read_key () in if int_of_char(key) = 13 then nbNom := 0 else ( Graphics.set_font "-*-fixed-medium-r-*--15-*-*-*-*-*-iso8859-1";Graphics.set_color (rgb 0 0 0);Graphics.draw_char key ; u:=!u +15;
                                                                                          nomjeu := !nomjeu ^ (String.make 1 (key)))
               end
             done
@@ -104,7 +154,7 @@ let reponseJ bool=
 
 
 (* Fonction permettant de charger l'image de début ainsi que de lancer la fonction de menu pour lier les entrées clavier *)
-let lancermenudebut bool = 
+let lancermenudebut bool =
   if (bool = true) then (menuDebut true ; reponseJ true) else ();;
 
 
@@ -148,7 +198,7 @@ let dessineRegion x y =
   done;;
 
 (* Fonction permettant de dessiner chaque région de sudoku, il y a en tout 9 régions  *)
-let dessineGrille bool= 
+let dessineGrille bool=
   for i = 0 to 8 do
     dessineRegion (100+(i mod 3)*3+(i mod 3)*165) (100+(i/3)*3+(i/3)*165);
   done;;
@@ -171,8 +221,8 @@ let grillesudokuSol = ref (Sudoku.lecturesolution (int_of_string(!numerogrille))
 *)
 
 let getarrayfromgrille grillesudokuB= let array = Array.make 81 0 in
-  for k = 0 to 80 do 
-    array.(k) <-(int_of_char(String.get grillesudokuB (k))-48); 
+  for k = 0 to 80 do
+    array.(k) <-(int_of_char(String.get grillesudokuB (k))-48);
   done;
   array;;
 
@@ -181,7 +231,7 @@ let getarrayfromgrille grillesudokuB= let array = Array.make 81 0 in
    Utile pour la suite du programme
 *)
 
-let getgrillefromarray grille arraygrille = 
+let getgrillefromarray grille arraygrille =
   for k = 0 to 80 do
     Bytes.set grille k (char_of_int(arraygrille.(k)+48));
   done;;
@@ -191,9 +241,9 @@ let getgrillefromarray grille arraygrille =
    Fonction indispensable pour getCaseCoord
 
 *)
-let getarraycasex bool = 
+let getarraycasex bool =
   let array = Array.make_matrix 9 9 0 in
-  for k = 0 to 80 do 
+  for k = 0 to 80 do
     array.(k/9).(k mod 9) <- (100 + (k mod 9)*55 +((k mod 9)/3)*3);
     (* Printf.printf"\n %d et %d | %d et %d\n "  (k/9) (k mod 9) (array.(k/9).(k mod 9).(0)) (array.(k/9).(k mod 9).(1));  *)
   done;
@@ -202,9 +252,9 @@ let getarraycasex bool =
 (* Fonction permettant de renvoyer un array contenant toutes les valeurs des ordonnées pour toutes les cases du sudoku
    Fonction indispensable pour getCaseCoord
 *)
-let getarraycasey bool = 
+let getarraycasey bool =
   let array = Array.make_matrix 9 9 0 in
-  for k = 0 to 80 do 
+  for k = 0 to 80 do
     array.(k/9).(k mod 9) <- (600 - (k/9)*55 - (k/27)*3);
     (* Printf.printf"\n %d et %d | %d et %d\n "  (k/9) (k mod 9) (array.(k/9).(k mod 9).(0)) (array.(k/9).(k mod 9).(1));  *)
   done;
@@ -216,9 +266,9 @@ let getarraycasey bool =
 
 *)
 let getCaseCoord x y arraycasex arraycasey =
-  let rec test k = 
-    if k >= 81 then -1 else 
-      begin 
+  let rec test k =
+    if k >= 81 then -1 else
+      begin
         if ((x > arraycasex.(k/9).(k mod 9) && x < (arraycasex.(k/9).(k mod 9)+55)) && (y< arraycasey.(k/9).(k mod 9) && y>(arraycasey.(k/9).(k mod 9)-55) )) then k
         else (test (k+1));
       end
@@ -246,9 +296,10 @@ let messagevie bool =
                         Graphics.draw_string ("Il vous reste   " ^ (string_of_int(!Sudoku.vie)) ^ "   vies "); Graphics.set_text_size 50; Graphics.set_color (rgb 0 255 0);Graphics.set_font "-*-fixed-medium-r-*--15-*-*-*-*-*-iso8859-1") else ();;
 
 
-(* Fonction permettant de dessiner un cercle sur messagevie pour le supprimer entièrement et le réafficher à chaque 
+
+(* Fonction permettant de dessiner un cercle sur messagevie pour le supprimer entièrement et le réafficher à chaque
    fois que le joueur pose une pièce. *)
-let clearmenuscore bool = 
+let clearmenuscore bool =
   if bool = true then (  Graphics.set_color (rgb 255 255 255);Graphics.draw_circle 950 250 250;Graphics.fill_circle 950 250 250; Graphics.set_color (rgb 0 255 0)) else ();;
 
 
@@ -286,7 +337,7 @@ let jouerSudoku bool=
   let tempgrilleretourarriere = ref (Sudoku.lecturegrid (int_of_string(!numerogrille))) in
 
 
-  while !bool do 
+  while !bool do
     let reponseJ = Graphics.wait_next_event [Graphics.Button_down] in
     let key = read_key () in if (testkeyrange key) then
       (var := getCaseCoord reponseJ.Graphics.mouse_x reponseJ.Graphics.mouse_y arraycasex arraycasey; messagevie true;
@@ -298,14 +349,14 @@ let jouerSudoku bool=
 
 
 
-      (if (key ='e') then ( if (staticarraygrille = !arraygrilleJ) then () else ((arraygrilleJ := Array.copy !tempretourarriere;getgrillefromarray !tempgrilleretourarriere !arraygrilleJ ;Graphics.clear_graph();lancerprog !tempgrilleretourarriere)))  else ());
+      (if (key ='e') then ( if ((!arraygrilleJ = staticarraygrille) || (!arraygrilleJ = !tempretourarriere)) then () else ((arraygrilleJ := Array.copy !tempretourarriere;getgrillefromarray !tempgrilleretourarriere !arraygrilleJ ;Graphics.clear_graph();lancerprog !tempgrilleretourarriere)))  else ());
   done ;;
 
 
 
 (* On relance le tout une fois qu'on a fini en spécifiant une nouvelle grille de sudoku par l'utilisateur
    et en redessinant toute la grille avec toutes les valeurs correspondantes *)
-let relancerletout bool = 
+let relancerletout bool =
   if (bool = true) then (
     numerogrille := "";
 
@@ -326,7 +377,7 @@ lancerprog !grillesudokuB;;
 jouerSudoku true;;
 
 (* Fonction permettant de pouvoir recommencer la grille en cas de défaite *)
-let testbool = ref true in 
+let testbool = ref true in
 while (!testbool) do
   let reponseE = Graphics.wait_next_event [Graphics.Button_down] in let key = read_key () in (if (key = 'o') then (Graphics.clear_graph();lancerprog !grillesudokuB;jouerSudoku true) else if (key ='n') then (testbool := false;Graphics.clear_graph()) else (if (key ='q' ) then (exit 0) else ()) );
 
@@ -336,15 +387,15 @@ done;;
 (* Boucle while du programme où on relance entièrement le programme si l'utilisateur l'a choisi
    Dans ce cas, ne pas oublier de reboucler sur la reponse pour pouvoir recommencer la même grille en cas de défaite
 *)
-while (true) do 
+while (true) do
 
   relancerletout true ;
-  ( 
+  (
     let testbool = ref true in
     while (!testbool) do
       let reponseE = Graphics.wait_next_event [Graphics.Button_down] in let key = read_key () in (if (key = 'o') then (Graphics.clear_graph();lancerprog !grillesudokuB;jouerSudoku true) else if (key ='n') then (testbool := false;Graphics.clear_graph()) else ( if (key ='q' ) then (exit 0) else ()) );
     done;)
-done;; 
+done;;
 
 (* jouerSudoku true;;  *)
 
@@ -353,6 +404,5 @@ done;;
 
 (* Printf.printf "%d" Graphics.foreground; *)
 
-(* let dessine2 = 
+(* let dessine2 =
    Sudoku.test2 10 10;; *)
-
