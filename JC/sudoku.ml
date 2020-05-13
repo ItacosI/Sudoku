@@ -69,6 +69,22 @@ let retireChiffres nb table =
       | _ -> table.(i).(j) <- '0'; rc (k-1) in
   rc nb; compteur := !compteur - nb;;
 
+
+
+
+let retireChiffres2 nb table =
+  let rec rc k =
+    match k with
+    | 0 -> ();
+    | _ ->
+      let i = (Random.int (81)) in
+      match table.(i) with
+      | 0 -> rc k
+      | _ -> table.(i) <- 0; rc (k-1) in
+  rc nb; compteur := !compteur - nb;;
+
+
+
 (*  Test le joueur a place le chiffre au bon endroit
  *  maJ -> matrice du joueur
  *  maS -> matrice solution
