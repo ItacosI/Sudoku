@@ -18,11 +18,11 @@ Enregistre nom/grille/diff dans variable et regarder si vide à chaque fois qu'o
 <ul>
   <li> [x] Il faut charger une grille de Sudoku et l'afficher comme dans l'image en haut
     Cette grille doit être chargée à partir d'un fichier</li>
-  <li> [ ] Un joueur doit pouvoir cliquer sur une case de la grille et la remplir avec un chiffre entre 1 et 9
+  <li> [x] Un joueur doit pouvoir cliquer sur une case de la grille et la remplir avec un chiffre entre 1 et 9
 on ne doit pas pouvoir cliquer et modifier une case préremplie</li>
   <li> [x] Le jeu doit vérifier si les réponses sont correctes ou pas. Vous êtes libres dans le choix de vérifier la grille en entière ou vérifier case par case.</li>
   <li> [x] Dès que la grille est complète, le jeu doit indiquer si vous avez gagné ou perdu</li>
-  <li> [ ] Le joueur doit être capable de revenir en arrière et effacer le(s) dernier(s) chiffre(s) ajouté(s)</li>
+  <li> [x] Le joueur doit être capable de revenir en arrière et effacer le(s) dernier(s) chiffre(s) ajouté(s)</li>
   <li> [ ] Le joueur doit pouvoir demander de l'aide au jeu pour résoudre la grille</li>
   <li> [ ] On doit pouvoir enregistrer et charger une partie</li>
   <li> [ ] On doit avoir une bouton qui affiche la liste des commandes et les règles du Sudoku</li>
