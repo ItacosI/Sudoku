@@ -319,16 +319,29 @@ let jouerSudoku bool=
 
   (* Faire changement focus case en un temps *)
   while !bool do
-    let reponseJ = Graphics.wait_next_event [Graphics.Button_down] in
-    let key = read_key () in if (testkeyrange key) then
-      (var := getCaseCoord reponseJ.Graphics.mouse_x reponseJ.Graphics.mouse_y arraycasex arraycasey; messagevie true;
-       if !var = -1 then () else if((staticarraygrille.(!var) = 0) && !arraygrilleJ.(!var) != 0 ) then () else if (staticarraygrille.(!var)!= 0) then () else ( if (arraygrilleSol.(!var) = (int_of_char(key)-48) )
-                                                                                                                                                                then ( tempretourarriere := Array.copy !arraygrilleJ; !arraygrilleJ.(!var) <- (int_of_char(key)-48);(dessineNb (!var) key))
-                                                                                                                                                                else (  (Sudoku.vie := !Sudoku.vie -1) ;clearmenuscore true;messagevie true; if !Sudoku.vie = 0 then (bool := false ;Sudoku.vie := 10; messageperdant true)));
-       if (!arraygrilleJ = arraygrilleSol) then (bool := false ;Sudoku.vie := 10; messagegagnant true ) else () )
-    else
 
-      (if (key ='e') then ( if ((!arraygrilleJ = staticarraygrille) || (!arraygrilleJ = !tempretourarriere)) then () else ((arraygrilleJ := Array.copy !tempretourarriere;tempgrilleretourarriere := (getgrillefromarray !arraygrilleJ) ;Graphics.clear_graph();lancerprog !tempgrilleretourarriere)))  else ());
+
+
+    let reponseJ = (Graphics.wait_next_event [Graphics.Button_down]) in
+    let pos = ref (reponseJ.Graphics.mouse_x,reponseJ.Graphics.mouse_y) in 
+    let encore = ref true in 
+    while (!encore ) do 
+
+      begin 
+        if Graphics.key_pressed () then (
+          let key = read_key () in if (testkeyrange key) then
+            (var := getCaseCoord (fst !pos) (snd !pos) arraycasex arraycasey; messagevie true;encore := false;
+             if !var = -1 then () else if((staticarraygrille.(!var) = 0) && !arraygrilleJ.(!var) != 0 ) then () else if (staticarraygrille.(!var)!= 0) then () else ( if (arraygrilleSol.(!var) = (int_of_char(key)-48) )
+                                                                                                                                                                      then ( tempretourarriere := Array.copy !arraygrilleJ; !arraygrilleJ.(!var) <- (int_of_char(key)-48);(dessineNb (!var) key))
+
+                                                                                                                                                                      else (  (Sudoku.vie := !Sudoku.vie -1) ;clearmenuscore true;messagevie true; if !Sudoku.vie = 0 then (bool := false ;Sudoku.vie := 10; messageperdant true)));
+             if (!arraygrilleJ = arraygrilleSol) then (bool := false ;Sudoku.vie := 10; messagegagnant true ) else () )
+          else
+
+            (if (key ='e') then ( if ((!arraygrilleJ = staticarraygrille) || (!arraygrilleJ = !tempretourarriere)) then () else ((arraygrilleJ := Array.copy !tempretourarriere;tempgrilleretourarriere := (getgrillefromarray !arraygrilleJ) ;Graphics.clear_graph();lancerprog !tempgrilleretourarriere)))  else ());
+        ) else if(Graphics.button_down ()) then ( pos := (Graphics.mouse_pos ()) ) else ()
+      end
+    done
   done ;;
 
 
