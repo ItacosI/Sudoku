@@ -153,7 +153,7 @@ let dessineSudoku grille =
 let dessineRegion x y =
   Graphics.set_color black;
   for i = 0 to 8 do
-    Graphics.fill_rect (x+(i mod 3)*55) (y+(i/3)*55) 53 53;
+    Graphics.fill_rect (x+(i mod 3)*55+2) (y+(i/3)*55+2) 51 51;
   done;;
 
 (* Fonction permettant de dessiner chaque région de sudoku, il y a en tout 9 régions  *)
@@ -249,8 +249,18 @@ let grillesudokuB = ref (getgrillefromarray !grillesudokuBis);;
 
 
 
+let getRealPos idCase = 
+  ((100 + (idCase mod 9)*55 + ((idCase mod 9)/3)*3, 601 - (idCase / 9)*55 - (idCase/27)*3));;
 
-
+let dessineSelect idCase efface =
+  if (idCase < 0) then () else (
+    if efface then Graphics.set_color white else Graphics.set_color cyan;
+    let pos = (getRealPos idCase) in
+    Graphics.fill_rect ((fst pos)-1) ((snd pos)-54) 2 55; (*Lisière gauche*)
+    Graphics.fill_rect ((fst pos)-1) ((snd pos)-56) 55 2; (*Lisère basse*)
+    Graphics.fill_rect ((fst pos)+54) ((snd pos)-56) 2 57; (*Lisière droite*)
+    Graphics.fill_rect ((fst pos)-1) ((snd pos)-1) 55 2 (*Lisière hautes*)
+  );;
 
 (* Message qu'on affiche lorsqu'on perd la partie
    On n'oublie pas de remettre tous les paramètres de Graphics, à savoir la couleur, la size et la font
@@ -317,9 +327,9 @@ let jouerSudoku bool=
   let tempretourarriere = ref (Array.copy !arraygrilleJ) in
   let tempgrilleretourarriere = ref (Sudoku.lecturegrid (int_of_string(!numerogrille))) in
 
+
   (* Faire changement focus case en un temps *)
   while !bool do
-
 
 
     let reponseJ = (Graphics.wait_next_event [Graphics.Button_down]) in
@@ -330,16 +340,18 @@ let jouerSudoku bool=
       begin 
         if Graphics.key_pressed () then (
           let key = read_key () in if (testkeyrange key) then
-            (var := getCaseCoord (fst !pos) (snd !pos) arraycasex arraycasey; messagevie true;encore := false;
+            (var := getCaseCoord (fst !pos) (snd !pos) arraycasex arraycasey; messagevie true;encore := false;	dessineSelect !var true;	
+
              if !var = -1 then () else if((staticarraygrille.(!var) = 0) && !arraygrilleJ.(!var) != 0 ) then () else if (staticarraygrille.(!var)!= 0) then () else ( if (arraygrilleSol.(!var) = (int_of_char(key)-48) )
                                                                                                                                                                       then ( tempretourarriere := Array.copy !arraygrilleJ; !arraygrilleJ.(!var) <- (int_of_char(key)-48);(dessineNb (!var) key))
 
-                                                                                                                                                                      else (  (Sudoku.vie := !Sudoku.vie -1) ;clearmenuscore true;messagevie true; if !Sudoku.vie = 0 then (bool := false ;Sudoku.vie := 10; messageperdant true)));
+                                                                                                                                                                      else (  (Sudoku.vie := !Sudoku.vie -1);clearmenuscore true;messagevie true; if !Sudoku.vie = 0 then (bool := false ;Sudoku.vie := 10; messageperdant true)));
              if (!arraygrilleJ = arraygrilleSol) then (bool := false ;Sudoku.vie := 10; messagegagnant true ) else () )
           else
 
             (if (key ='e') then ( if ((!arraygrilleJ = staticarraygrille) || (!arraygrilleJ = !tempretourarriere)) then () else ((arraygrilleJ := Array.copy !tempretourarriere;tempgrilleretourarriere := (getgrillefromarray !arraygrilleJ) ;Graphics.clear_graph();lancerprog !tempgrilleretourarriere)))  else ());
-        ) else if(Graphics.button_down ()) then ( pos := (Graphics.mouse_pos ()) ) else ()
+        ) else if(Graphics.button_down ()) then ( dessineSelect (getCaseCoord (fst !pos) (snd !pos) arraycasex arraycasey) true; pos := (Graphics.mouse_pos ()); dessineSelect (getCaseCoord (fst !pos) (snd !pos) arraycasex arraycasey) false 
+                                                ) else ()
       end
     done
   done ;;
