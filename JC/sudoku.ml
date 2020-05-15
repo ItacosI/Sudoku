@@ -201,17 +201,9 @@ let cadre ma i j va =
 
 
 
-
+(* test si le nombre est deja present dans la ligne, colonne ou carré*)
 let test ma i j va = (cadre ma i j va) && (testLig ma i va) && (testCol ma j va);;
 
-(*
-let testFinal ma =
-  let res = ref true in
-  for i = 0 to 8 do
-    for j = 0 to 8 do
-      res := (!res && test ma i) j ma.(i).(j))
-    done
-  done ; !res;; *)
 
 (* On crée une fonction qui prend en paramètre une chaine de caractère(qui représentera le sudoku en brut) et renvoie une matrice 9*9 *)
 
