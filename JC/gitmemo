@@ -1,0 +1,56 @@
+git init
+git remote add origin git@github.com:oxigene14/SudokuCAML.git
+git remote -v
+git add graph.ml sudoku.ml
+git commit -m "First commit"
+git push origin master
+git pull origin master (git checkout . en cas d'erreur, si déjà uptodate faire 
+git reset --hard origin/master ou si on veut un commit en particulier : 
+git reset --hard 4091aa431512564c5b937aeda2a5b4c285a7debd) 
+git log to see the entire log system
+Si les logs ne montrent pas tous les commits faire : git fetch --all
+
+
+
+git clone githuburl
+
+git fetch
+git reset --hard origin/<branch> 
+will discard all local changes.
+
+Where as:
+git pull
+Which is exactly the same as:
+git fetch
+git merge origin/<branch>
+
+
+
+
+git rm -rf TP2/
+git commit -m "remove folder"
+git push origin master
+
+
+git log master
+git checkout 99bd4acfea5e324da2a7a2e7aadba982499a14f6
+git checkout master
+
+
+
+
+#for a specific branch
+git clone -b my-branch git@github.com:user/myproject.git
+
+
+git remote rm origin when changing url in .git/config
+
+
+!!!!!! don't forget to : nano ~/.gitconfig and specify the right name and mail address
+
+
+
+master is a branch and can be different
+
+
+A fork is a copy of a repository. Forking a repository allows you to freely experiment with changes without affecting the original project. Most commonly, forks are used to either propose changes to someone else's project or to use someone else's project as a starting point for your own idea
