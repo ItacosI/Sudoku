@@ -244,6 +244,19 @@ let grillesudokuBis = ref (getarrayfromgrille !grillesudokuB);;
 (Sudoku.retireChiffres2 ( (20 + int_of_string(!numerodifficultejeu))) (!grillesudokuBis)) ;;
 (* (Sudoku.retireChiffres2 ( (20 + int_of_string(!numerodifficultejeu))) (!grillesudokuBis)) ;; *)
 
+let procedurealeatoire arraygrille arraysolution =
+  let valrandomgrille = ref (Random.int (81)) in 
+  let val1 = ref 0 in
+  let bool = ref true in
+
+
+  while (!bool) do
+    if((arraygrille.(!valrandomgrille) = 0 ) && arraysolution.(!valrandomgrille) != 0)
+    then ((arraygrille.(!valrandomgrille) <- arraysolution.(!valrandomgrille)); val1 := arraysolution.(!valrandomgrille);bool := false )
+    else (valrandomgrille := ((!valrandomgrille + 1 ) mod 81 ))
+
+  done; (!valrandomgrille)
+
 (* Enfin, on récupère la grille associée plus haut avec la fonction getgrillefromarray *)
 let grillesudokuB = ref (getgrillefromarray !grillesudokuBis);;
 
@@ -328,53 +341,10 @@ let drawregles bool = Graphics.set_font "-*-fixed-medium-r-*--16-*-*-*-*-*-iso88
   Graphics.draw_string "- Appuyez sur E pour revenir en arriere en effacant la derniere lettre ajoutee";Graphics.moveto 630 290;
   Graphics.draw_string "- Une fois la partie finie, appuyez sur O (lettre) pour recommencer la grille ou";Graphics.moveto 630 270;
   Graphics.draw_string "  sur N pour retourner au menu principal et enfin Q pour quitter le programme";Graphics.moveto 630 250;
-
-
-
-
-
-
-
-
-
-
   Graphics.set_font "-*-fixed-medium-r-*--15-*-*-*-*-*-iso8859-1";;
 
-(* 
-let drawregles bool = Graphics.set_font "-*-fixed-medium-r-*--16-*-*-*-*-*-iso8859-1";Graphics.set_color (rgb 255 0 0);Graphics.moveto 630 500;Graphics.draw_string "- Appuyez sur E pour revenir en arriere en effacant la derniere lettre ajoutee";Graphics.moveto 630 470;
-
-Graphics.draw_string "- Une fois la partie finie, appuyez sur O (lettre) pour recommencer la grille,";Graphics.moveto 630 450;
-Graphics.draw_string "sur N pour retourner au menu principal et enfin Q pour quitter le programme";
-
- *)
 
 
-let procedurealeatoire arraygrille arraysolution =
-  let valrandomgrille = ref (Random.int (81)) in 
-  let val1 = ref 0 in
-  let bool = ref true in
-
-
-  while (!bool) do
-    if((arraygrille.(!valrandomgrille) = 0 ) && arraysolution.(!valrandomgrille) != 0)
-    then ((arraygrille.(!valrandomgrille) <- arraysolution.(!valrandomgrille)); val1 := arraysolution.(!valrandomgrille);bool := false )
-    else (valrandomgrille := ((!valrandomgrille + 1 ) mod 81 ))
-
-  done; (!valrandomgrille)
-(* 
-  let procedurealeatoire arraygrille arraysolution =
-    let valrandomgrille = ref (Random.int (81)) in 
-    let val3 = ref 0 in
-
-
-    while ((arraygrille.(!valrandomgrille) != (arraysolution.(!valrandomgrille))) && (arraygrille.(!valrandomgrille) != 0) ) do
-      if(( arraygrille.(!valrandomgrille) = 0 ) && arraysolution.(!valrandomgrille) != 0 )
-
-      then ((arraygrille.(!valrandomgrille) <- arraysolution.(!valrandomgrille)); val3 := arraysolution.(!valrandomgrille) )
-      else (valrandomgrille := ((!valrandomgrille +1) mod 81));
-
-
-   *)
 
 
 let jouerSudoku bool=
