@@ -293,7 +293,7 @@ let messagegagnant bool =
 
 (* Idem que la fonction d'avant mais va permettre d'afficher le nombre de vies restantes et de l'actualiser à chaque coup *)
 let messagevie bool =
-  if bool = true then ( Graphics.set_color (rgb 0 0 0);Graphics.set_font "-*-fixed-medium-r-*--24-*-*-*-*-*-iso8859-1";Graphics.set_text_size 100; Graphics.moveto 800 550;
+  if bool = true then ( Graphics.set_color (rgb 0 0 0);Graphics.set_font "-*-fixed-medium-r-*--24-*-*-*-*-*-iso8859-1";Graphics.set_text_size 100; Graphics.moveto 770 400;
                         Graphics.draw_string ("Il vous reste   " ^ (string_of_int(!Sudoku.vie)) ^ "   vies "); Graphics.set_text_size 50; Graphics.set_color (rgb 0 255 0);Graphics.set_font "-*-fixed-medium-r-*--15-*-*-*-*-*-iso8859-1") else ();;
 
 
@@ -301,17 +301,23 @@ let messagevie bool =
 (* Fonction permettant de dessiner un cercle sur messagevie pour le supprimer entièrement et le réafficher à chaque
    fois que le joueur pose une pièce. *)
 let clearmenuscore bool =
-  if bool = true then (  Graphics.set_color (rgb 255 255 255);Graphics.fill_rect 750 545 400 30; Graphics.set_color (rgb 0 255 0)) else ();;
+  if bool = true then (  Graphics.set_color (rgb 255 255 255 );Graphics.fill_rect 750 395 400 30; Graphics.set_color (rgb 0 255 0)) else ();;
 
 
 let clearmenuregle bool =
-  if bool = true then (  Graphics.set_color (rgb 255 255 255);Graphics.fill_rect 605 15 670 510; Graphics.set_color (rgb 0 255 0)) else ();;
+  if bool = true then (  Graphics.set_color (rgb 255 255 255 );Graphics.fill_rect 605 15 670 380; Graphics.set_color (rgb 0 255 0)) else ();;
 
 
 (* Fonction permettant d'afficher le message principal du jeu, à savoir qu'on peut appuyer sur E pour effacer la dernière lettre ajoutée *)
 let message bool =
-  if bool = true then (Graphics.set_font "-*-fixed-medium-r-*--15-*-*-*-*-*-iso8859-1";Graphics.set_color (rgb 0 0 0);Graphics.set_text_size 100; Graphics.moveto 620 600;
-                       Graphics.draw_string "Appuyez sur Z pour faire apparaitre le menu des commandes et des regles" ;Graphics.set_font "-*-fixed-medium-r-*--24-*-*-*-*-*-iso8859-1") else ();;
+  if bool = true then (Graphics.set_font "-*-fixed-medium-r-*--18-*-*-*-*-*-iso8859-1";Graphics.set_color (rgb 0 0 0);Graphics.set_text_size 100; Graphics.moveto 620 600;
+                       Graphics.draw_string "Appuyez sur Z pour faire apparaitre le menu des commandes et des regles" ;Graphics.moveto 620 530;Graphics.set_font "-*-fixed-medium-r-*--21-*-*-*-*-*-iso8859-1";
+                       Graphics.draw_string("Vous avez choisi la grille numero " ^ (!numerogrille)  ^ " avec une difficulte de " ^ (!numerodifficultejeu));) else ();;
+
+(* 
+let messagecompteur bool = 
+  if bool = true then (Graphics.set_color (rgb 0 0 0 );Graphics.set_font "-*-fixed-medium-r-*--16-*-*-*-*-*-iso8859-1";Graphics.moveto 650 500;Graphics.draw_string"dzqdqzdzqdzqdzqdzqdzqdzqdzqdzqdzq") else ();;
+ *)
 
 
 (* Programme prenant en paramètre une grille sudoku et permettant de dessiner la grille,
@@ -330,17 +336,17 @@ let lancerprog grillesudoku =
 *)
 
 
-let drawregles bool = Graphics.set_font "-*-fixed-medium-r-*--16-*-*-*-*-*-iso8859-1";Graphics.set_color (rgb 255 0 0);Graphics.moveto 630 500;
-  Graphics.draw_string "Une grille de sudoku est divisee en 9 lignes, 9 colonnes et 9 carres.";Graphics.moveto 630 470;
-  Graphics.draw_string "  - La ligne est un ensemble de neuf cases disposees horizontalement.";Graphics.moveto 630 450;
-  Graphics.draw_string "  - La colonne est un ensemble de neuf cases disposees verticalement.";Graphics.moveto 630 430;
-  Graphics.draw_string "  - Le carre est un ensemble de neuf cases disposees en carre de 3x3 cases.";Graphics.moveto 630 410;
-  Graphics.draw_string "  - La grille etant composees de neuf de ces carres.";Graphics.moveto 630 380;
-  Graphics.draw_string "Chacune de ces zones doit contenir tous les chiffres de 1 e 9.";Graphics.moveto 630 360;
-  Graphics.draw_string "Chaque case recoit un chiffre de 1 e 9 et fait partie des trois zones.";Graphics.moveto 630 310;
-  Graphics.draw_string "- Appuyez sur E pour revenir en arriere en effacant la derniere lettre ajoutee";Graphics.moveto 630 290;
-  Graphics.draw_string "- Une fois la partie finie, appuyez sur O (lettre) pour recommencer la grille ou";Graphics.moveto 630 270;
-  Graphics.draw_string "  sur N pour retourner au menu principal et enfin Q pour quitter le programme";Graphics.moveto 630 250;
+let drawregles bool = Graphics.set_font "-*-fixed-medium-r-*--16-*-*-*-*-*-iso8859-1";Graphics.set_color (rgb 255 0 0);Graphics.moveto 630 350;
+  Graphics.draw_string "Une grille de sudoku est divisee en 9 lignes, 9 colonnes et 9 carres.";Graphics.moveto 630 320;
+  Graphics.draw_string "  - La ligne est un ensemble de neuf cases disposees horizontalement.";Graphics.moveto 630 300;
+  Graphics.draw_string "  - La colonne est un ensemble de neuf cases disposees verticalement.";Graphics.moveto 630 280;
+  Graphics.draw_string "  - Le carre est un ensemble de neuf cases disposees en carre de 3x3 cases.";Graphics.moveto 630 260;
+  Graphics.draw_string "  - La grille etant composees de neuf de ces carres.";Graphics.moveto 630 240;
+  Graphics.draw_string "Chacune de ces zones doit contenir tous les chiffres de 1 e 9.";Graphics.moveto 630 210;
+  Graphics.draw_string "Chaque case recoit un chiffre de 1 e 9 et fait partie des trois zones.";Graphics.moveto 630 160;
+  Graphics.draw_string "- Appuyez sur E pour revenir en arriere en effacant la derniere lettre ajoutee";Graphics.moveto 630 140;
+  Graphics.draw_string "- Une fois la partie finie, appuyez sur O (lettre) pour recommencer la grille ou";Graphics.moveto 630 110;
+  Graphics.draw_string "  sur N pour retourner au menu principal et enfin Q pour quitter le programme";Graphics.moveto 630 100;
   Graphics.set_font "-*-fixed-medium-r-*--15-*-*-*-*-*-iso8859-1";;
 
 
