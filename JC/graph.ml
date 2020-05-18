@@ -34,6 +34,13 @@ let clearmenudifficulte bool =
 
 
 
+(* Les différentes variables représentant des grilles de sudoku *)
+let grillesudokuSol = ref "";;
+let grillesudokuB = ref "";;
+
+
+
+
 (* Variables réference du menu de jeu  *)
 let nomjeu = ref "";;
 let numerogrille = ref "";;
@@ -43,6 +50,52 @@ let numerodifficultejeu = ref "";;
 
 let testkeyrange key =
   if(key ='1' || key ='2' ||key ='3' ||key ='4' ||key ='5' ||key ='6' ||key ='7' ||key ='8' || key ='9' || key ='a') then true else false;;
+
+
+
+
+let cleareffacersvg bool = 
+  if bool = true then (Graphics.set_color (rgb 255 255 255);Printf.printf"\n%s\n" "lol";Graphics.fill_rect 270 125 200 50) else ();;
+
+
+
+let cleareffacerchargerpartie bool = 
+  if bool = true then (Graphics.set_color (rgb 255 255 255);Graphics.fill_rect 810 125 200 50) else ();;
+
+
+
+let lireSauvegarde blob =
+  try begin
+    let c = open_in "save.blob" in
+    let premiereLigne = input_line c in
+    if (int_of_string(premiereLigne) = 1) then (
+      grillesudokuB := input_line c;
+      nomjeu := input_line c;
+      Sudoku.vie := int_of_string(input_line c);
+      numerogrille := input_line c;
+      numerodifficultejeu := input_line c;
+      Sudoku.compteur := int_of_string(input_line c);
+      close_in c;
+
+
+    )else (cleareffacersvg true; Graphics.moveto 275 145;Graphics.set_color (rgb 0 0 0);Graphics.set_font "--fixed-medium-r---16-----*-iso8859-1";
+           Graphics.draw_string ("SAUVEGARDE INEXISTANTE")
+          )
+    (* écrire sauvegarde inéxistante *)
+
+  end
+  with
+  |End_of_file -> (cleareffacersvg true; Graphics.moveto 275 145;Graphics.set_color (rgb 0 0 0);Graphics.set_font "--fixed-medium-r---16-----*-iso8859-1";
+                   Graphics.draw_string ("SAUVEGARDE CORROMPUE"));
+    (* écrire "sauvegarde corrompue" *)
+  |Not_found  -> (cleareffacersvg true; Graphics.moveto 275 145;Graphics.set_color (rgb 0 0 0);Graphics.set_font "--fixed-medium-r---16-----*-iso8859-1";
+                  Graphics.draw_string ("SAUVEGARDE NON TROUVEE"));;
+(* écrire "sauvegarde non trouvée" *)
+
+
+
+
+
 
 (* Fonction du menu principale permettant de lire au clavier le nom, le numéro de grille ainsi que la difficulté tout en l'affichant à l'écran *)
 let reponseJ bool=
@@ -83,8 +136,8 @@ let reponseJ bool=
           while (!nbNom > 0 && !encore) do
             begin
               Graphics.moveto !u 460; 
-              if Graphics.key_pressed () then (nbNom := (!nbNom - 1); let key = read_key () in if (key !='a') then ( Graphics.set_font "-*-fixed-medium-r-*--15-*-*-*-*-*-iso8859-1";Graphics.set_color (rgb 0 0 0);Graphics.draw_char key ; u:=!u +15;
-                                                                                                                     nomjeu := !nomjeu ^ (String.make 1 (key))) else ()) 
+              if Graphics.key_pressed () then (nbNom := (!nbNom - 1); let key = read_key () in ( Graphics.set_font "-*-fixed-medium-r-*--15-*-*-*-*-*-iso8859-1";Graphics.set_color (rgb 0 0 0);Graphics.draw_char key ; u:=!u +15;
+                                                                                                 nomjeu := !nomjeu ^ (String.make 1 (key))) ) 
 
               else if ((Graphics.button_down ()) && (snd (Graphics.mouse_pos ())) > 445 && (snd (Graphics.mouse_pos ())) < 495 && (fst (Graphics.mouse_pos ())) > 901 && (fst (Graphics.mouse_pos ())) < 951 ) then
                 begin nomjeu := "";nbNom := 10;u := 720; clearmenunom true;
@@ -165,7 +218,8 @@ let reponseJ bool=
           done
         end
 
-      |valide when s.Graphics.mouse_y > 125 && s.Graphics.mouse_y < 175-> if s.Graphics.mouse_x > 540 && s.Graphics.mouse_x < 740 then begin Graphics.clear_graph(); ba:= false end
+      |valide when (s.Graphics.mouse_y > 125 && s.Graphics.mouse_y < 175 && s.Graphics.mouse_x > 540 && s.Graphics.mouse_x < 740 )-> if (s.Graphics.mouse_x > 540 && s.Graphics.mouse_x < 740) then begin Graphics.clear_graph(); ba:= false end
+      |effacersauvegarde when (s.Graphics.mouse_y > 125 && s.Graphics.mouse_y < 175) -> if ( s.Graphics.mouse_x > 270 && s.Graphics.mouse_x < 470) then begin lireSauvegarde true end;
       |_ -> ();
     done;
   ) else ()
@@ -185,15 +239,19 @@ let referencemenu bool =
     end
 
 
-
-
-(* Fonction permettant lancer le menu en initialisant le compteur d'affichage en jeu *)
 let lancermenudebut bool =
-  if (bool = true) then (menuDebut true ; reponseJ true; referencemenu true;(Sudoku.compteur :=  (20 +(int_of_string(!numerodifficultejeu))));) else ();;
+  if (bool = true) then (menuDebut true ; reponseJ true; referencemenu true; 
+                         (Sudoku.compteur :=  (20 +(int_of_string(!numerodifficultejeu))));) else ();;
+
+
+
 
 
 (* On lance cette fonction *)
 lancermenudebut true;;
+
+
+
 
 
 (*  Fonction permettant de dessiner à l'écran le numéro que l'on attribue à la case de sudoku, uniquement au cas par cas  *)
@@ -235,6 +293,7 @@ let dessineGrille bool=
   for i = 0 to 8 do
     dessineRegion (100+(i mod 3)*3+(i mod 3)*165) (100+(i/3)*3+(i/3)*165);
   done;;
+
 
 
 
@@ -302,11 +361,11 @@ let getCaseCoord x y arraycasex arraycasey =
 
 
 (* Même fonction permettant de lire la grille solution associée à la grille que l'utilisateur a demandé *)
-let grillesudokuSol = ref (Sudoku.lecturesolution (int_of_string(!numerogrille)));;
+grillesudokuSol := (Sudoku.lecturesolution (int_of_string(!numerogrille)));;
 
 
 (* Même fonction permettant de lire la grille solution associée à la grille que l'utilisateur a demandé *)
-let grillesudokuB = ref (Sudoku.lecturesolution (int_of_string(!numerogrille)));; 
+grillesudokuB := (Sudoku.lecturesolution (int_of_string(!numerogrille)));; 
 
 (* Valeur grille temporaire permettant de get en forme d'array la grille !grillesudokuB*)
 let grillesudokuBis = ref (getarrayfromgrille !grillesudokuB);;
@@ -376,7 +435,6 @@ let messagesettings bool =
                        Graphics.set_font "-*-fixed-medium-r-*--15-*-*-*-*-*-iso8859-1" ) else ();;
 
 
-
 (* Programme prenant en paramètre une grille sudoku et permettant de dessiner la grille,
    dessiner les valeurs des cases et d'initialiser le message et le messagevie pour le démarrage d'une partie *)
 let lancerprog grillesudoku =
@@ -386,6 +444,8 @@ let lancerprog grillesudoku =
   dessineSudoku grillesudoku ;
   messagesettings true;
   messagevie true;;
+
+
 
 
 let drawregles bool = Graphics.set_font "-*-fixed-medium-r-*--16-*-*-*-*-*-iso8859-1";Graphics.set_color (rgb 255 0 0);Graphics.moveto 630 350;
