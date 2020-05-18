@@ -8,7 +8,7 @@ CryptPad : https://cryptpad.fr/code/#/2/code/edit/E8dXYmBdhzwAAD+c35lGBmeR/
 
 # Todo
 
-Enregistre nom/grille/diff dans variable et regarder si vide à chaque fois qu'on reclique dessus, si oui normale,  sinon effacer varible, effacer zone de texte, remetre ref à initial.
+Faire fonction compteur de cases vides (itérateur sur array [voir avec Mathilde]).
 
 
 # Objectifs
