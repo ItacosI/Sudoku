@@ -165,7 +165,7 @@ let reponseJ bool=
           done
         end
 
-      |valide when s.Graphics.mouse_y > 125 && s.Graphics.mouse_y < 175-> if s.Graphics.mouse_x > 540 && s.Graphics.mouse_x < 740 then begin Graphics.clear_graph(); ba:= false end
+      |valide when s.Graphics.mouse_y > 125 && s.Graphics.mouse_y < 175-> if s.Graphics.mouse_x > 540 && s.Graphics.mouse_x < 740 then begin Printf.printf "%s" !numerogrille; Graphics.clear_graph(); ba:= false end
       |_ -> ();
     done;
   ) else ()
@@ -180,8 +180,8 @@ let referencemenu bool =
   if (bool = true) then
     begin
       (if (!nomjeu = "") then nomjeu := "Bob" else ());
-      (if (!numerogrille = "" || (!numerogrille > string_of_int(243))) then ( let valrandom = (Random.int (243)) in (numerogrille := string_of_int(valrandom))) else ()) ;
-      (if ((!numerodifficultejeu = "") || (!numerodifficultejeu > string_of_int(40))) then (let valrandom = (Random.int (40)) in (numerodifficultejeu := string_of_int(valrandom)  ) ) else ());
+      (Printf.printf "|%s  " !numerogrille; if (!numerogrille = "" || (int_of_string(!numerogrille) > 243)) then ( let valrandom = (Random.int (243)) in (numerogrille := string_of_int(valrandom))) else ()) ;
+      (if ((!numerodifficultejeu = "") || (int_of_string(!numerodifficultejeu) > 40)) then (let valrandom = (Random.int (40)) in (numerodifficultejeu := string_of_int(valrandom)  ) ) else ());
     end
 
 (* Fonction permettant lancer le menu en initialisant le compteur d'affichage en jeu *)
