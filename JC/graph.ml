@@ -23,14 +23,14 @@ let menuDebut bool=
 
 
 let clearmenunom bool = 
-  if bool = true then (Graphics.set_color (rgb 255 255 255);Graphics.fill_rect 700 445 198 48) else ();;
+  if bool = true then (Graphics.set_color (rgb 255 255 255);Graphics.fill_rect 700 445 197 48) else ();;
 
 
 let clearmenugrille bool = 
-  if bool = true then (Graphics.set_color (rgb 255 255 255);Graphics.fill_rect 700 345 100 48) else ();;
+  if bool = true then (Graphics.set_color (rgb 255 255 255);Graphics.fill_rect 700 345 99 48) else ();;
 
 let clearmenudifficulte bool = 
-  if bool = true then (Graphics.set_color (rgb 255 255 255);Graphics.fill_rect 700 245 100 48) else ();;
+  if bool = true then (Graphics.set_color (rgb 255 255 255);Graphics.fill_rect 700 245 99 48) else ();;
 
 
 
@@ -86,18 +86,19 @@ let reponseJ bool=
               if Graphics.key_pressed () then (nbNom := (!nbNom - 1); let key = read_key () in if (key !='a') then ( Graphics.set_font "-*-fixed-medium-r-*--15-*-*-*-*-*-iso8859-1";Graphics.set_color (rgb 0 0 0);Graphics.draw_char key ; u:=!u +15;
                                                                                                                      nomjeu := !nomjeu ^ (String.make 1 (key))) else ()) 
 
+              else if ((Graphics.button_down ()) && (snd (Graphics.mouse_pos ())) > 445 && (snd (Graphics.mouse_pos ())) < 495 && (fst (Graphics.mouse_pos ())) > 901 && (fst (Graphics.mouse_pos ())) < 951 ) then
+                begin nomjeu := "";nbNom := 10;u := 720; clearmenunom true;
+                end
+
+              else if ((Graphics.button_down ()) && (snd (Graphics.mouse_pos ())) > 345 && (snd (Graphics.mouse_pos ())) < 395 && (fst (Graphics.mouse_pos ())) > 801 && (fst (Graphics.mouse_pos ())) < 851 )then
+                begin numerogrille := "";nbGrille := 3;v := 720; clearmenugrille true;
+                end
+
+              else if ((Graphics.button_down ()) && (snd (Graphics.mouse_pos ())) > 245 && (snd (Graphics.mouse_pos ())) < 295 && (fst (Graphics.mouse_pos ())) > 801 && (fst (Graphics.mouse_pos ())) < 851 ) then
+                begin numerodifficultejeu := "";nbDifficulte := 2;w := 720; clearmenudifficulte true;
+                end
+
               else if ((Graphics.button_down ()) && ((snd (Graphics.mouse_pos ())) < 445 || (snd (Graphics.mouse_pos ())) > 495) && ((fst (Graphics.mouse_pos ())) > 700 || (fst (Graphics.mouse_pos ())) < 900)) then (
-                if ((snd (Graphics.mouse_pos ())) > 445 && (snd (Graphics.mouse_pos ())) < 495 && (fst (Graphics.mouse_pos ())) > 901 && (fst (Graphics.mouse_pos ())) < 951 ) then
-                  begin nomjeu := "";nbNom := 10;u := 720; clearmenunom true;
-                  end else();
-
-                if ((snd (Graphics.mouse_pos ())) > 345 && (snd (Graphics.mouse_pos ())) < 395 && (fst (Graphics.mouse_pos ())) > 801 && (fst (Graphics.mouse_pos ())) < 851 )then
-                  begin numerogrille := "";nbGrille := 3;v := 720; clearmenugrille true;
-                  end else();
-
-                if ((snd (Graphics.mouse_pos ())) > 245 && (snd (Graphics.mouse_pos ())) < 295 && (fst (Graphics.mouse_pos ())) > 801 && (fst (Graphics.mouse_pos ())) < 851 ) then
-                  begin numerodifficultejeu := "";nbDifficulte := 2;w := 720; clearmenudifficulte true;
-                  end else();
                 encore := false) else ()
             end
           done
@@ -116,18 +117,19 @@ let reponseJ bool=
               if Graphics.key_pressed () then ( let key = read_key () in ( if (((testkeyrange key) || key ='0') && key !='a') then ( nbGrille := (!nbGrille - 1);Graphics.set_font "-*-fixed-medium-r-*--15-*-*-*-*-*-iso8859-1";Graphics.set_color (rgb 0 0 0);Graphics.draw_char key ;v:=!v +15;
                                                                                                                                      numerogrille := !numerogrille ^ (String.make 1 (key))) else () ))
 
+              else if ((Graphics.button_down ()) && (snd (Graphics.mouse_pos ())) >  445 && (snd (Graphics.mouse_pos ())) < 495 && (fst (Graphics.mouse_pos ())) > 901 && (fst (Graphics.mouse_pos ())) < 951 ) then
+                begin nomjeu := "";nbNom := 10;u := 720; clearmenunom true;
+                end
+
+              else if ((Graphics.button_down ()) && (snd (Graphics.mouse_pos ())) > 345 && (snd (Graphics.mouse_pos ())) < 395 && (fst (Graphics.mouse_pos ())) > 801 && (fst (Graphics.mouse_pos ())) < 851 )then
+                begin numerogrille := "";nbGrille := 3;v := 720; clearmenugrille true;
+                end
+
+              else if ((Graphics.button_down ()) && (snd (Graphics.mouse_pos ())) > 245 && (snd (Graphics.mouse_pos ())) < 295 && (fst (Graphics.mouse_pos ())) > 801 && (fst (Graphics.mouse_pos ())) < 851 )then
+                begin numerodifficultejeu := "";nbDifficulte := 2;w := 720; clearmenudifficulte true;
+                end
+
               else if ((Graphics.button_down ()) && ((snd (Graphics.mouse_pos ())) < 345 || (snd (Graphics.mouse_pos ())) > 395) && ((fst (Graphics.mouse_pos ())) > 700 || (fst (Graphics.mouse_pos ())) < 900)) then (
-                if ((snd (Graphics.mouse_pos ())) >  445 && (snd (Graphics.mouse_pos ())) < 495 && (fst (Graphics.mouse_pos ())) > 901 && (fst (Graphics.mouse_pos ())) < 951 ) then
-                  begin nomjeu := "";nbNom := 10;u := 720; clearmenunom true;
-                  end else();
-
-                if ((snd (Graphics.mouse_pos ())) > 345 && (snd (Graphics.mouse_pos ())) < 395 && (fst (Graphics.mouse_pos ())) > 801 && (fst (Graphics.mouse_pos ())) < 851 )then
-                  begin numerogrille := "";nbGrille := 3;v := 720; clearmenugrille true;
-                  end else();
-
-                if ((snd (Graphics.mouse_pos ())) > 245 && (snd (Graphics.mouse_pos ())) < 295 && (fst (Graphics.mouse_pos ())) > 801 && (fst (Graphics.mouse_pos ())) < 851 )then
-                  begin numerodifficultejeu := "";nbDifficulte := 2;w := 720; clearmenudifficulte true;
-                  end else();
                 encore := false) else ()
 
             end
@@ -144,18 +146,19 @@ let reponseJ bool=
               if Graphics.key_pressed () then ( let key = read_key () in (if (((testkeyrange key) || key ='0') && key !='a') then (nbDifficulte := (!nbDifficulte - 1);Graphics.set_font "-*-fixed-medium-r-*--15-*-*-*-*-*-iso8859-1";Graphics.set_color (rgb 0 0 0);Graphics.draw_char key ; w:=!w +15;
                                                                                                                                    numerodifficultejeu := !numerodifficultejeu ^ (String.make 1 (key)))))
 
+              else if ((Graphics.button_down ()) && (snd (Graphics.mouse_pos ())) > 445 && (snd (Graphics.mouse_pos ())) < 495 && (fst (Graphics.mouse_pos ())) > 901 && (fst (Graphics.mouse_pos ())) < 951 )then
+                begin nomjeu := "";nbNom := 10;u := 720; clearmenunom true;
+                end
+
+              else if ((Graphics.button_down ()) && (snd (Graphics.mouse_pos ())) > 345 && (snd (Graphics.mouse_pos ())) < 395 && (fst (Graphics.mouse_pos ())) > 801 && (fst (Graphics.mouse_pos ())) < 851 )then
+                begin numerogrille := "";nbGrille := 3;v := 720; clearmenugrille true;
+                end
+
+              else if ((Graphics.button_down ()) && (snd (Graphics.mouse_pos ())) > 245 && (snd (Graphics.mouse_pos ())) < 295 && (fst (Graphics.mouse_pos ())) > 801 && (fst (Graphics.mouse_pos ())) < 851 )then
+                begin numerodifficultejeu := "";nbDifficulte := 2;w := 720; clearmenudifficulte true;
+                end
+
               else if ((Graphics.button_down ()) && ((snd (Graphics.mouse_pos ())) < 245 || (snd (Graphics.mouse_pos ())) > 295) && ((fst (Graphics.mouse_pos ())) > 700 || (fst (Graphics.mouse_pos ())) < 900)) then (
-                if ( (snd (Graphics.mouse_pos ())) > 445 && (snd (Graphics.mouse_pos ())) < 495 && (fst (Graphics.mouse_pos ())) > 901 && (fst (Graphics.mouse_pos ())) < 951 )then
-                  begin nomjeu := "";nbNom := 10;u := 720; clearmenunom true;
-                  end else();
-
-                if ((snd (Graphics.mouse_pos ())) > 345 && (snd (Graphics.mouse_pos ())) < 395 && (fst (Graphics.mouse_pos ())) > 801 && (fst (Graphics.mouse_pos ())) < 851 )then
-                  begin numerogrille := "";nbGrille := 3;v := 720; clearmenugrille true;
-                  end else();
-
-                if ((snd (Graphics.mouse_pos ())) > 245 && (snd (Graphics.mouse_pos ())) < 295 && (fst (Graphics.mouse_pos ())) > 801 && (fst (Graphics.mouse_pos ())) < 851 )then
-                  begin numerodifficultejeu := "";nbDifficulte := 2;w := 720; clearmenudifficulte true;
-                  end else();
                 encore := false) else ()
 
             end
@@ -177,9 +180,12 @@ let referencemenu bool =
   if (bool = true) then
     begin
       (if (!nomjeu = "") then nomjeu := "Bob" else ());
-      (if (!numerogrille = "" || (!numerogrille > string_of_int(243))) then ( let valrandom = (Random.int (243)) in (numerogrille := string_of_int(valrandom))) else ()) ;
-      (if ((!numerodifficultejeu = "") || (!numerodifficultejeu > string_of_int(40))) then (let valrandom = (Random.int (40)) in (numerodifficultejeu := string_of_int(valrandom)  ) ) else ());
+      (if (!numerogrille = "" || (int_of_string(!numerogrille)) > 243) then ( let valrandom = (Random.int (243)) in (numerogrille := string_of_int(valrandom))) else ()) ;
+      (if ((!numerodifficultejeu = "") || (int_of_string(!numerodifficultejeu)) > 40) then (let valrandom = (Random.int (40)) in (numerodifficultejeu := string_of_int(valrandom)  ) ) else ());
     end
+
+
+
 
 (* Fonction permettant lancer le menu en initialisant le compteur d'affichage en jeu *)
 let lancermenudebut bool =
@@ -438,7 +444,7 @@ let jouerSudoku bool=
         if Graphics.key_pressed () then
           begin
             let key = read_key () in if (testkeyrange key) then
-              (var := getCaseCoord (fst !pos) (snd !pos) arraycasex arraycasey;encore := false;	dessineSelect !var true;	
+              (var := getCaseCoord (fst !pos) (snd !pos) arraycasex arraycasey;encore := false; dessineSelect !var true;  
 
                if !var = -1 then () else if((staticarraygrille.(!var) = 0) && !arraygrilleJ.(!var) != 0 ) then () else if (staticarraygrille.(!var)!= 0) then () else ( if (arraygrilleSol.(!var) = (int_of_char(key)-48) )
                                                                                                                                                                         then ( tempretourarriere := Array.copy !arraygrilleJ; !arraygrilleJ.(!var) <- (int_of_char(key)-48);(dessineNb (!var) key);boolretourarriere := true;Sudoku.compteur := (!Sudoku.compteur -1);draw_image (Image.init_image "cache_vie.ppm") 664 491;messagevie true)
