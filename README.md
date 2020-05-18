@@ -65,13 +65,13 @@ cliquer sur un chiffre surligne ce chiffre partout dans la grille</li>
 
 
 # Model de sauvegarde
-0000000000000000000000000000000...000000000
+<pre>0000000000000000000000000000000...000000000
 [nom]
 [nb_vie]
 [num_grille]
 [difficulté]
 [nb_cases_restantes]
-
+</pre>
 
 
 
