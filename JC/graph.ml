@@ -111,7 +111,7 @@ let referencemenu bool =
       (if ((!numerodifficultejeu = "") || (!numerodifficultejeu > string_of_int(40))) then (let valrandom = (Random.int (40)) in (numerodifficultejeu := string_of_int(valrandom)  ) ) else ());
     end
 
-(* Fonction permettant de charger l'image de début ainsi que de lancer la fonction de menu pour lier les entrées clavier *)
+(* Fonction permettant lancer le menu en initialisant le compteur d'affichage en jeu *)
 let lancermenudebut bool =
   if (bool = true) then (menuDebut true ; reponseJ true; referencemenu true;(Sudoku.compteur :=  (20 +(int_of_string(!numerodifficultejeu))));) else ();;
 
@@ -191,7 +191,6 @@ let getgrillefromarray arraygrille =
 *)
 
 
-(* TODO optimiser mettre en doublet sft snd *)
 let getarraycasex bool =
   let array = Array.make_matrix 9 9 0 in
   for k = 0 to 80 do
@@ -236,21 +235,25 @@ let grillesudokuB = ref (Sudoku.lecturesolution (int_of_string(!numerogrille)));
 (* Valeur grille temporaire permettant de get en forme d'array la grille !grillesudokuB*)
 let grillesudokuBis = ref (getarrayfromgrille !grillesudokuB);;
 
-(* On applique la fonction retireChiffres2 du fichier sudoku.ml permettant de retirer le nombre de chiffres qu'on veut
+(* On applique la fonction retireChiffres du fichier sudoku.ml permettant de retirer le nombre de chiffres qu'on veut
    Ici, plus on monte en difficulté, moins de chiffres seront supprimés
 *)
 
 (Sudoku.retireChiffres ( (20 + int_of_string(!numerodifficultejeu))) (!grillesudokuBis)) ;;
 (Sudoku.compteur :=  (20 +(int_of_string(!numerodifficultejeu))));;
-(* (Sudoku.retireChiffres2 ( (20 + int_of_string(!numerodifficultejeu))) (!grillesudokuBis)) ;; *)
+
 (* Enfin, on récupère la grille associée plus haut avec la fonction getgrillefromarray *)
 let grillesudokuB = ref (getgrillefromarray !grillesudokuBis);;
 
 
-
+(* Fonction qui retourne un doublet de coordonnées de l'ID de la case entrée en paramètre, elle est utilisée pour surbriller les cases *)
 let getRealPos idCase = 
   ((100 + (idCase mod 9)*55 + ((idCase mod 9)/3)*3, 601 - (idCase / 9)*55 - (idCase/27)*3));;
 
+
+(* Fonction prenant une idCase en paramètre ainsi qu'un bool efface permettant soit d'effacer le contour en le dessinant en blanc,
+   soit en le déssinant en cyan, elle utilise la fonction getRealPos
+*)
 let dessineSelect idCase efface =
   if (idCase < 0) then () else (
     if efface then Graphics.set_color white else Graphics.set_color cyan;
@@ -282,13 +285,7 @@ let messagegagnant bool =
    fois que le joueur pose une pièce. *)
 
 
-let clearmenuregle bool =
-  if bool = true then (  Graphics.set_color (rgb 255 255 255 );Graphics.fill_rect 605 15 670 380; Graphics.set_color (rgb 0 255 0)) else ();;
-
-
-
-
-(* Idem que la fonction d'avant mais va permettre d'afficher le nombre de vies restantes et de l'actualiser à chaque coup *)
+(* Idem que la fonction d'avant mais va permettre d'afficher le nombre de vies restantes ainsi que le nombre de cases restantes et de les actualiser à chaque coup *)
 let messagevie bool =
   if bool = true then ( Graphics.set_color (rgb 9 47 243);Graphics.set_font "-*-fixed-medium-r-*--21-*-*-*-*-*-iso8859-1";Graphics.set_text_size 100; Graphics.moveto 675 489;
                         Graphics.draw_string ( (string_of_int(!Sudoku.vie)));
@@ -315,12 +312,6 @@ let lancerprog grillesudoku =
   messagevie true;;
 
 
-(* Fonction principale du fonctionnement du sudoku où plusieurs références ont été créees pour garder le type unit
-   Le principe est de récupérer à l'aide de la fonction getCaseCoord la valeur de la case sur laquelle on clique pour ensuite actualiser l'array du jeu avec la nouvelle valeur
-   tempretourarriere et tempgrilleretourarriere vont permettre de pouvoir utiliser l'option de retour en arrière dans le jeu
-*)
-
-
 let drawregles bool = Graphics.set_font "-*-fixed-medium-r-*--16-*-*-*-*-*-iso8859-1";Graphics.set_color (rgb 255 0 0);Graphics.moveto 630 350;
   Graphics.draw_string "Une grille de sudoku est divisee en 9 lignes, 9 colonnes et 9 carres.";Graphics.moveto 630 320;
   Graphics.draw_string "  - La ligne est un ensemble de neuf cases disposees horizontalement.";Graphics.moveto 630 300;
@@ -337,6 +328,12 @@ let drawregles bool = Graphics.set_font "-*-fixed-medium-r-*--16-*-*-*-*-*-iso88
   Graphics.set_font "-*-fixed-medium-r-*--15-*-*-*-*-*-iso8859-1";;
 
 
+
+
+(* Fonction principale du fonctionnement du sudoku où plusieurs références ont été créees pour garder le type unit
+   Le principe est de récupérer à l'aide de la fonction getCaseCoord la valeur de la case sur laquelle on clique pour ensuite actualiser l'array du jeu avec la nouvelle valeur
+   tempretourarriere et tempgrilleretourarriere vont permettre de pouvoir utiliser l'option de retour en arrière dans le jeu
+*)
 
 
 
@@ -383,7 +380,7 @@ let jouerSudoku bool=
 
             else  
 
-              (if (key ='e' && !boolretourarriere = true) then ( if ((!arraygrilleJ = staticarraygrille) || (!arraygrilleJ = !tempretourarriere)) then () else ((arraygrilleJ := Array.copy !tempretourarriere;tempgrilleretourarriere := (getgrillefromarray !arraygrilleJ) ;Graphics.clear_graph();lancerprog !tempgrilleretourarriere)))  else (if (key ='z' && !boolregles = true) then (drawregles bool;boolregles := false) else ( if (key ='z' && !boolregles = false) then (clearmenuregle true;boolregles := true) else ())));
+              (if (key ='e' && !boolretourarriere = true) then ( if ((!arraygrilleJ = staticarraygrille) || (!arraygrilleJ = !tempretourarriere)) then () else ((arraygrilleJ := Array.copy !tempretourarriere;tempgrilleretourarriere := (getgrillefromarray !arraygrilleJ) ;Graphics.clear_graph();lancerprog !tempgrilleretourarriere)))  else (if (key ='z' && !boolregles = true) then ((draw_image(Image.init_image "regle.ppm") 618 97);boolregles := false) else ( if (key ='z' && !boolregles = false) then ((draw_image(Image.init_image "cache_regle.ppm") 618 97);boolregles := true) else ())));
 
           end
 
@@ -394,6 +391,10 @@ let jouerSudoku bool=
   done ;;
 
 
+(* Fonction très importante permettant de relancer entièrement le programme lorsque l'utilisateur le demande
+   On réinitialise donc les variables numerogrilles et numerodifficultejeu ainsi que les nouvelles possibles grilles de sudoku demandées par l'utilisateur
+    On n'oublie pas de draw_image l'image de fond du sudoku avant de redessiner la grille par dessus
+*)
 let relancerletout bool =
   if (bool = true) then (
     numerogrille := "";
@@ -441,12 +442,3 @@ while (true) do
     done;)
 done;;
 
-(* jouerSudoku true;;  *)
-
-(* dessineSudoku grillesudokuB;; *)
-
-
-(* Printf.printf "%d" Graphics.foreground; *)
-
-(* let dessine2 =
-   Sudoku.test2 10 10;; *)
