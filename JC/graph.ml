@@ -78,18 +78,14 @@ let lireSauvegarde blob =
       close_in c;
 
 
-    )else (cleareffacersvg true; Graphics.moveto 275 145;Graphics.set_color (rgb 0 0 0);Graphics.set_font "--fixed-medium-r---16-----*-iso8859-1";
-           Graphics.draw_string ("SAUVEGARDE INEXISTANTE")
+    )else (cleareffacersvg true;
           )
     (* écrire sauvegarde inéxistante *)
 
   end
   with
-  |End_of_file -> (cleareffacersvg true; Graphics.moveto 275 145;Graphics.set_color (rgb 0 0 0);Graphics.set_font "--fixed-medium-r---16-----*-iso8859-1";
-                   Graphics.draw_string ("SAUVEGARDE CORROMPUE"));
-    (* écrire "sauvegarde corrompue" *)
-  |Not_found  -> (cleareffacersvg true; Graphics.moveto 275 145;Graphics.set_color (rgb 0 0 0);Graphics.set_font "--fixed-medium-r---16-----*-iso8859-1";
-                  Graphics.draw_string ("SAUVEGARDE NON TROUVEE"));;
+  |_  -> (cleareffacersvg true; Graphics.moveto 275 145;Graphics.set_color (rgb 0 0 0);Graphics.set_font "-*-fixed-medium-r-*--12-*-*-*-*-*-iso8859-1";
+          Graphics.draw_string ("SAUVEGARDE CORROMPUE/NON TROUVEE"));;
 (* écrire "sauvegarde non trouvée" *)
 
 
@@ -219,7 +215,7 @@ let reponseJ bool=
         end
 
       |valide when (s.Graphics.mouse_y > 125 && s.Graphics.mouse_y < 175 && s.Graphics.mouse_x > 540 && s.Graphics.mouse_x < 740 )-> if (s.Graphics.mouse_x > 540 && s.Graphics.mouse_x < 740) then begin Graphics.clear_graph(); ba:= false end
-      |effacersauvegarde when (s.Graphics.mouse_y > 125 && s.Graphics.mouse_y < 175) -> if ( s.Graphics.mouse_x > 270 && s.Graphics.mouse_x < 470) then begin lireSauvegarde true end;
+      |effacersauvegarde when (s.Graphics.mouse_y > 125 && s.Graphics.mouse_y < 175) -> if ( s.Graphics.mouse_x > 270 && s.Graphics.mouse_x < 470) then begin lireSauvegarde true end
       |_ -> ();
     done;
   ) else ()
