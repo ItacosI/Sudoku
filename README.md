@@ -43,8 +43,8 @@ masquer la grille si le timer est arrêté</li>
   <li> [ ] Calculer un score pour chaque grille en fonction du temps
 garder le score pour pouvoir essayer de le battre</li>
   <li> [x] Surligner la case sélectionnée</li>
-  <li> [ ] Améliorer l'affichage (ajouter un fond, etc)</li>
-  <li> [ ] Redémarrer une partie</li>
+  <li> [x] Améliorer l'affichage (ajouter un fond, etc)</li>
+  <li> [x] Redémarrer une partie</li>
   <li> [ ] Augmenter les fonctionnalités de l'aide au joueur
 donner plusieurs possibilités pour chaque case | 
 limiter le nombre de fois qu'un joueur peut demander de l'aide | 
