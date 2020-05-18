@@ -65,6 +65,9 @@ cliquer sur un chiffre surligne ce chiffre partout dans la grille</li>
 
 
 # Model de sauvegarde
+save.extensionALaQuepouic
+
+[bool_vide?]
 <pre>0000000000000000000000000000000...000000000
 [nom]
 [nb_vie]
