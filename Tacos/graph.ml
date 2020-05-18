@@ -39,10 +39,41 @@ let nomjeu = ref "";;
 let numerogrille = ref "";;
 (* Implémenter difficulte  *)
 let numerodifficultejeu = ref "";;
+(* Faux si partie issue d'une sauvegarde *)
+let nonSauvegarde = ref true;;
+(* Les différentes variables représentant des grilles de sudoku *)
+let grillesudokuSol = ref "";;
+let grillesudokuB = ref "";;
+let grillesudokuBis = ref (Array.make 81 0);;
 
 
 let testkeyrange key =
   if(key ='1' || key ='2' ||key ='3' ||key ='4' ||key ='5' ||key ='6' ||key ='7' ||key ='8' || key ='9' || key ='a') then true else false;;
+
+let lireSauvegarde blob =
+try
+  begin
+    let c = open_in "save.blob" in
+    let premiereLigne = input_line c in
+    if (int_of_string(premiereLigne) = 1) then (
+      grillesudokuB := input_line c;
+      nomjeu := input_line c;
+      Sudoku.vie := int_of_string(input_line c);
+      numerogrille := input_line c;
+      numerodifficultejeu := input_line c;
+      Sudoku.compteur := int_of_string(input_line c);
+      close_in c;
+
+      nonSauvegarde := false;
+      false
+    )else (true)
+      (* écrire sauvegarde inéxistante *)
+    
+  end
+with End_of_file -> Printf.printf "end of file"; true;
+        (* écrire "sauvegarde corrompue" *)
+     |_ -> (true);;
+        (* écrire "sauvegarde non trouvée" *)
 
 (* Fonction du menu principale permettant de lire au clavier le nom, le numéro de grille ainsi que la difficulté tout en l'affichant à l'écran *)
 let reponseJ bool=
@@ -165,11 +196,15 @@ let reponseJ bool=
           done
         end
 
-      |valide when s.Graphics.mouse_y > 125 && s.Graphics.mouse_y < 175-> if s.Graphics.mouse_x > 540 && s.Graphics.mouse_x < 740 then begin Printf.printf "%s" !numerogrille; Graphics.clear_graph(); ba:= false end
+      |valide when (s.Graphics.mouse_y > 125 && s.Graphics.mouse_y < 175 && s.Graphics.mouse_x > 540 && s.Graphics.mouse_x < 740) -> begin Graphics.clear_graph(); ba:= false end
+      |chargeSauvegarde when (s.Graphics.mouse_y > 125 && s.Graphics.mouse_y < 175 && s.Graphics.mouse_x > 810 && s.Graphics.mouse_x < 1010) -> ba := (lireSauvegarde true);Graphics.set_color black; Graphics.fill_rect 0 0 100 100
       |_ -> ();
     done;
   ) else ()
 ;;
+
+
+
 
 
 (* Fonction referencemenu permettant de prendre des mesures si l'utilisateur ne rentre rien au clavier
@@ -180,7 +215,7 @@ let referencemenu bool =
   if (bool = true) then
     begin
       (if (!nomjeu = "") then nomjeu := "Bob" else ());
-      (Printf.printf "|%s  " !numerogrille; if (!numerogrille = "" || (int_of_string(!numerogrille) > 243)) then ( let valrandom = (Random.int (243)) in (numerogrille := string_of_int(valrandom))) else ()) ;
+      (if (!numerogrille = "" || (int_of_string(!numerogrille) > 243)) then ( let valrandom = (Random.int (243)) in (numerogrille := string_of_int(valrandom))) else ()) ;
       (if ((!numerodifficultejeu = "") || (int_of_string(!numerodifficultejeu) > 40)) then (let valrandom = (Random.int (40)) in (numerodifficultejeu := string_of_int(valrandom)  ) ) else ());
     end
 
@@ -297,27 +332,28 @@ let getCaseCoord x y arraycasex arraycasey =
       end
   in test 0;;
 
+if (!nonSauvegarde) then 
+  begin
+    (* Même fonction permettant de lire la grille solution associée à la grille que l'utilisateur a demandé *)
+    grillesudokuSol := (Sudoku.lecturesolution (int_of_string(!numerogrille)));
 
-(* Même fonction permettant de lire la grille solution associée à la grille que l'utilisateur a demandé *)
-let grillesudokuSol = ref (Sudoku.lecturesolution (int_of_string(!numerogrille)));;
 
+    (* Même fonction permettant de lire la grille solution associée à la grille que l'utilisateur a demandé *)
+    grillesudokuB := (Sudoku.lecturesolution (int_of_string(!numerogrille)));
 
-(* Même fonction permettant de lire la grille solution associée à la grille que l'utilisateur a demandé *)
-let grillesudokuB = ref (Sudoku.lecturesolution (int_of_string(!numerogrille)));; 
+    (* Valeur grille temporaire permettant de get en forme d'array la grille !grillesudokuB*)
+    grillesudokuBis := (getarrayfromgrille !grillesudokuB);
 
-(* Valeur grille temporaire permettant de get en forme d'array la grille !grillesudokuB*)
-let grillesudokuBis = ref (getarrayfromgrille !grillesudokuB);;
+    (* On applique la fonction retireChiffres du fichier sudoku.ml permettant de retirer le nombre de chiffres qu'on veut
+       Ici, plus on monte en difficulté, moins de chiffres seront supprimés
+    *)
 
-(* On applique la fonction retireChiffres du fichier sudoku.ml permettant de retirer le nombre de chiffres qu'on veut
-   Ici, plus on monte en difficulté, moins de chiffres seront supprimés
-*)
+    (Sudoku.retireChiffres ( (20 + int_of_string(!numerodifficultejeu))) (!grillesudokuBis));
+    (Sudoku.compteur :=  (20 +(int_of_string(!numerodifficultejeu))));
 
-(Sudoku.retireChiffres ( (20 + int_of_string(!numerodifficultejeu))) (!grillesudokuBis)) ;;
-(Sudoku.compteur :=  (20 +(int_of_string(!numerodifficultejeu))));;
-
-(* Enfin, on récupère la grille associée plus haut avec la fonction getgrillefromarray *)
-let grillesudokuB = ref (getgrillefromarray !grillesudokuBis);;
-
+    (* Enfin, on récupère la grille associée plus haut avec la fonction getgrillefromarray *)
+    grillesudokuB := (getgrillefromarray !grillesudokuBis);
+  end;;
 
 (* Fonction qui retourne un doublet de coordonnées de l'ID de la case entrée en paramètre, elle est utilisée pour surbriller les cases *)
 let getRealPos idCase = 
