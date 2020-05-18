@@ -64,7 +64,13 @@ cliquer sur un chiffre surligne ce chiffre partout dans la grille</li>
 3ème mode : Méthode sans système de vie avec retour en arrière et vérification avec la grille de solution seulement à la fin quand la grille sera complètement remplie, à ce moment-là le système nous dira si la grille de sudoku est correcte ou non avec l'aide de la correction.
 
 
-
+# Model de sauvegarde
+0000000000000000000000000000000...000000000
+[nom]
+[nb_vie]
+[num_grille]
+[difficulté]
+[nb_cases_restantes]
 
 
 
