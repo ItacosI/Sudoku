@@ -449,14 +449,14 @@ let lancerprog grillesudoku =
   messagevie true;;
 
 
-let sauvegarder bool =
+let sauvegarder grille =
   let c = open_out "save.blob" in
-  output_string c "1";
-  output_string c !grillesudokuB;
-  output_string c !nomjeu;
-  output_string c (string_of_int(!Sudoku.vie));
-  output_string c !numerogrille;
-  output_string c !numerodifficultejeu;
+  output_string c "1\n";
+  output_string c ((getgrillefromarray !grille)^"\n");
+  output_string c (!nomjeu^"\n");
+  output_string c ((string_of_int(!Sudoku.vie))^"\n");
+  output_string c (!numerogrille^"\n");
+  output_string c (!numerodifficultejeu^"\n");
   close_out c;;
 
 (* Fonction principale du fonctionnement du sudoku où plusieurs références ont été créees pour garder le type unit
@@ -516,11 +516,9 @@ let jouerSudoku bool=
         else (
           if(Graphics.button_down ()) then (
             if ((fst (Graphics.mouse_pos ())) > 838 && (fst (Graphics.mouse_pos ())) < 900 && (snd (Graphics.mouse_pos ())) > 444 && (snd (Graphics.mouse_pos ())) < 563) then (
-              sauvegarder true;
+              sauvegarder arraygrilleJ;
               bool := false;
-              clear_graph();
-              menuDebut true;
-
+              exit 0;
               Printf.printf "blob"
             ) else (
               dessineSelect (getCaseCoord (fst !pos) (snd !pos) arraycasex arraycasey) true;
@@ -586,7 +584,7 @@ while (!testbool) do
 
   |recommencer when (s.Graphics.mouse_y > 125 && s.Graphics.mouse_y < 175 && s.Graphics.mouse_x > 270 && s.Graphics.mouse_x < 470) -> ((if (!nonSauvegarde = true) then (Sudoku.compteur :=  (20 +(int_of_string(!numerodifficultejeu)))) else (Sudoku.compteur := (Sudoku.compteZerogrille (!grillesudokuB))));Graphics.clear_graph();lancerprog !grillesudokuB;jouerSudoku true) ;
 
-  |menuprincipal when (s.Graphics.mouse_y > 125 && s.Graphics.mouse_y < 175 && s.Graphics.mouse_x > 540 && s.Graphics.mouse_x < 740) -> begin testbool := false;Graphics.clear_graph(); end
+  |menuprincipal when (s.Graphics.mouse_y > 125 && s.Graphics.mouse_y < 175 && s.Graphics.mouse_x > 540 && s.Graphics.mouse_x < 740) -> begin testbool := false;Graphics.clear_graph();nomjeu := "";numerogrille := ""; numerodifficultejeu := ""; end
 
   |quitter when (s.Graphics.mouse_y > 125 && s.Graphics.mouse_y < 175 && s.Graphics.mouse_x > 800 && s.Graphics.mouse_x < 1020)  ->  (exit 0) ;
 
@@ -611,7 +609,7 @@ while (true) do
 
       |recommencer when (s.Graphics.mouse_y > 125 && s.Graphics.mouse_y < 175 && s.Graphics.mouse_x > 270 && s.Graphics.mouse_x < 470) -> ((if (!nonSauvegarde = true) then (Sudoku.compteur :=  (20 +(int_of_string(!numerodifficultejeu)))) else (Sudoku.compteur := (Sudoku.compteZerogrille (!grillesudokuB))));Graphics.clear_graph();lancerprog !grillesudokuB;jouerSudoku true) ;
 
-      |menuprincipal when (s.Graphics.mouse_y > 125 && s.Graphics.mouse_y < 175 && s.Graphics.mouse_x > 540 && s.Graphics.mouse_x < 740) -> begin testbool := false;Graphics.clear_graph(); end
+      |menuprincipal when (s.Graphics.mouse_y > 125 && s.Graphics.mouse_y < 175 && s.Graphics.mouse_x > 540 && s.Graphics.mouse_x < 740) -> begin testbool := false;Graphics.clear_graph();nomjeu := "";numerogrille := ""; numerodifficultejeu := ""; end
 
       |quitter when (s.Graphics.mouse_y > 125 && s.Graphics.mouse_y < 175 && s.Graphics.mouse_x > 800 && s.Graphics.mouse_x < 1020)  ->  (exit 0) ;
 
