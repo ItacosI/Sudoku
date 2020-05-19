@@ -24,7 +24,7 @@ on ne doit pas pouvoir cliquer et modifier une case préremplie</li>
   <li> [x] Dès que la grille est complète, le jeu doit indiquer si vous avez gagné ou perdu</li>
   <li> [x] Le joueur doit être capable de revenir en arrière et effacer le(s) dernier(s) chiffre(s) ajouté(s)</li>
   <li> [x] Le joueur doit pouvoir demander de l'aide au jeu pour résoudre la grille</li>
-  <li> [ ] On doit pouvoir enregistrer et charger une partie</li>
+  <li> [x] On doit pouvoir enregistrer et charger une partie</li>
   <li> [x] On doit avoir une bouton qui affiche la liste des commandes et les règles du Sudoku</li>
 </ul>
 
@@ -33,7 +33,7 @@ on ne doit pas pouvoir cliquer et modifier une case préremplie</li>
 <ul>
   <li> [ ] Backtracking : stocker chaque décision dans une pile. Si vous voulez annuler une décision et effacer le chiffre, votre jeu doit effacer tous les decisions qui ont été faites après la decision à effacer</li>
   <li> [x] Ajouter des niveaux de difficulté</li>
-  <li> [ ] Menu: avoir un menu pour :
+  <li> [x] Menu: avoir un menu pour :
 démarrer le jeu / charger une partie | 
 choisir le niveau de difficulté | 
 choisir une grille (avec un aperçu de chaque grille)</li>
@@ -49,7 +49,7 @@ garder le score pour pouvoir essayer de le battre</li>
 donner plusieurs possibilités pour chaque case | 
 limiter le nombre de fois qu'un joueur peut demander de l'aide | 
 cliquer sur un chiffre surligne ce chiffre partout dans la grille</li>
-  <li> [ ] Un jeu complet : le jeu est composé de plusieurs niveaux, s'enchaînant les uns avec les autres. Il y a une logique de jeu (score pour chaque niveau etc)</li>
+  <li> [x] Un jeu complet : le jeu est composé de plusieurs niveaux, s'enchaînant les uns avec les autres. Il y a une logique de jeu (score pour chaque niveau etc)</li>
   <li> [ ] Vous êtes libres de rajouter d'autres fonctionnalités dans votre jeu tant que vous les expliquez dans le rapport</li>
 </ul>
 
