@@ -62,6 +62,11 @@ let cleareffacerchargerpartie bool =
 
 exception Fichier_Corrompu;;
 
+let effacersauvegarde bool =
+  let c = open_out "save.blob" in
+  output_string c "0";
+  close_out c;
+  Printf.printf "yo";;
 
 let lireSauvegarde blob =
   try
@@ -89,7 +94,8 @@ let lireSauvegarde blob =
         nonSauvegarde := false;
         Graphics.clear_graph();
         false
-      )else (true)
+      )else (cleareffacerchargerpartie true; Graphics.moveto 815 145;Graphics.set_color (rgb 0 0 0);Graphics.set_font "-*-fixed-medium-r-*--12-*-*-*-*-*-iso8859-1";
+             Graphics.draw_string ("SAUVEGARDE CORROMPUE/NON TROUVEE");(true))
       (* écrire sauvegarde inéxistante *)
 
     end
@@ -223,7 +229,7 @@ let reponseJ bool=
         end
 
       |valide when (s.Graphics.mouse_y > 125 && s.Graphics.mouse_y < 175 && s.Graphics.mouse_x > 540 && s.Graphics.mouse_x < 740) -> begin Graphics.clear_graph(); ba:= false end
-      |effacerSauvegarde when (s.Graphics.mouse_y > 125 && s.Graphics.mouse_y < 175 && s.Graphics.mouse_x > 270 && s.Graphics.mouse_x < 470) -> ();
+      |effacerSauvegarde when (s.Graphics.mouse_y > 125 && s.Graphics.mouse_y < 175 && s.Graphics.mouse_x > 270 && s.Graphics.mouse_x < 470) -> (effacersauvegarde true; cleareffacersvg true;Graphics.moveto 320 145;Graphics.set_color (rgb 0 0 0);Graphics.set_font "-*-fixed-medium-r-*--12-*-*-*-*-*-iso8859-1";Graphics.draw_string ("SAUVEGARDE EFFACEE"););
       |chargeSauvegarde when (s.Graphics.mouse_y > 125 && s.Graphics.mouse_y < 175 && s.Graphics.mouse_x > 800 && s.Graphics.mouse_x < 1020)  ->  ba := (lireSauvegarde true) ;
       |_ -> ();
     done;
@@ -519,7 +525,6 @@ let jouerSudoku bool=
               sauvegarder arraygrilleJ;
               bool := false;
               exit 0;
-              Printf.printf "blob"
             ) else (
               dessineSelect (getCaseCoord (fst !pos) (snd !pos) arraycasex arraycasey) true;
               pos := (Graphics.mouse_pos ());
@@ -587,7 +592,7 @@ while (!testbool) do
   |menuprincipal when (s.Graphics.mouse_y > 125 && s.Graphics.mouse_y < 175 && s.Graphics.mouse_x > 540 && s.Graphics.mouse_x < 740) -> begin testbool := false;Graphics.clear_graph();nomjeu := "";numerogrille := ""; numerodifficultejeu := ""; end
 
   |quitter when (s.Graphics.mouse_y > 125 && s.Graphics.mouse_y < 175 && s.Graphics.mouse_x > 800 && s.Graphics.mouse_x < 1020)  ->  (exit 0) ;
-
+  |_ -> ();
     (* let key = read_key () in (if (key = 'o') then ((if (!nonSauvegarde = true) then (Sudoku.compteur :=  (20 +(int_of_string(!numerodifficultejeu)))) else (Sudoku.compteur := (Sudoku.compteZerogrille (!grillesudokuB))));Graphics.clear_graph();lancerprog !grillesudokuB;jouerSudoku true) else if (key ='n') then (testbool := false;Graphics.clear_graph()) else (if (key ='q' ) then (exit 0) else ()) ); *)
 
 done;;
@@ -612,7 +617,7 @@ while (true) do
       |menuprincipal when (s.Graphics.mouse_y > 125 && s.Graphics.mouse_y < 175 && s.Graphics.mouse_x > 540 && s.Graphics.mouse_x < 740) -> begin testbool := false;Graphics.clear_graph();nomjeu := "";numerogrille := ""; numerodifficultejeu := ""; end
 
       |quitter when (s.Graphics.mouse_y > 125 && s.Graphics.mouse_y < 175 && s.Graphics.mouse_x > 800 && s.Graphics.mouse_x < 1020)  ->  (exit 0) ;
-
+      |_ -> ();
         (* let key = read_key () in (if (key = 'o') then (Graphics.clear_graph();lancerprog !grillesudokuB;jouerSudoku true) else if (key ='n') then (testbool := false;Graphics.clear_graph()) else ( if (key ='q' ) then (exit 0) else ()) ); *)
     done;)
 done;;
