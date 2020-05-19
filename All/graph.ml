@@ -497,6 +497,7 @@ let jouerSudoku bool=
     let val2 = ref 0 in
 
 
+
     while (!encore ) do 
 
       begin 
@@ -515,7 +516,7 @@ let jouerSudoku bool=
 
             else  
 
-              (if (key ='e' && !boolretourarriere = true) then ( if ((!arraygrilleJ = staticarraygrille) || (!arraygrilleJ = !tempretourarriere)) then () else ((arraygrilleJ := Array.copy !tempretourarriere;tempgrilleretourarriere := (getgrillefromarray !arraygrilleJ) ;Graphics.clear_graph();lancerprog !tempgrilleretourarriere)))  else (if (key ='z' && !boolregles = true) then ((draw_image(Image.init_image "rsc/regle.ppm") 618 97);boolregles := false) else ( if (key ='z' && !boolregles = false) then ((draw_image(Image.init_image "rsc/cache_regle.ppm") 618 97);boolregles := true) else ())));
+              (if (key ='e' && !boolretourarriere = true) then (Sudoku.compteur := !Sudoku.compteur +1; if ((!arraygrilleJ = staticarraygrille) || (!arraygrilleJ = !tempretourarriere)) then () else ((arraygrilleJ := Array.copy !tempretourarriere;tempgrilleretourarriere := (getgrillefromarray !arraygrilleJ) ;Graphics.clear_graph();lancerprog !tempgrilleretourarriere)))  else (if (key ='z' && !boolregles = true) then ((draw_image(Image.init_image "rsc/regle.ppm") 618 97);boolregles := false) else ( if (key ='z' && !boolregles = false) then ((draw_image(Image.init_image "rsc/cache_regle.ppm") 618 97);boolregles := true) else ())));
 
           end
 
