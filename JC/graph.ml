@@ -23,21 +23,14 @@ let menuDebut bool=
 
 
 let clearmenunom bool = 
-  if bool = true then (Graphics.set_color (rgb 255 255 255);Graphics.fill_rect 700 445 197 48) else ();;
+  if bool = true then (Graphics.set_color (rgb 255 255 255);Graphics.fill_rect 700 445 198 48) else ();;
 
 
 let clearmenugrille bool = 
-  if bool = true then (Graphics.set_color (rgb 255 255 255);Graphics.fill_rect 700 345 99 48) else ();;
+  if bool = true then (Graphics.set_color (rgb 255 255 255);Graphics.fill_rect 700 345 100 48) else ();;
 
 let clearmenudifficulte bool = 
-  if bool = true then (Graphics.set_color (rgb 255 255 255);Graphics.fill_rect 700 245 99 48) else ();;
-
-
-
-(* Les différentes variables représentant des grilles de sudoku *)
-let grillesudokuSol = ref "";;
-let grillesudokuB = ref "";;
-
+  if bool = true then (Graphics.set_color (rgb 255 255 255);Graphics.fill_rect 700 245 100 48) else ();;
 
 
 
@@ -46,6 +39,12 @@ let nomjeu = ref "";;
 let numerogrille = ref "";;
 (* Implémenter difficulte  *)
 let numerodifficultejeu = ref "";;
+(* Faux si partie issue d'une sauvegarde *)
+let nonSauvegarde = ref true;;
+(* Les différentes variables représentant des grilles de sudoku *)
+let grillesudokuSol = ref "";;
+let grillesudokuB = ref "";;
+let grillesudokuBis = ref (Array.make 81 0);;
 
 
 let testkeyrange key =
@@ -53,48 +52,49 @@ let testkeyrange key =
 
 
 
-
 let cleareffacersvg bool = 
-  if bool = true then (Graphics.set_color (rgb 255 255 255);Printf.printf"\n%s\n" "lol";Graphics.fill_rect 270 125 200 50) else ();;
+  if bool = true then (Graphics.set_color (rgb 255 255 255);Graphics.fill_rect 270 125 200 50) else ();;
 
 
 
 let cleareffacerchargerpartie bool = 
-  if bool = true then (Graphics.set_color (rgb 255 255 255);Graphics.fill_rect 810 125 200 50) else ();;
+  if bool = true then (Graphics.set_color (rgb 255 255 255);(Graphics.fill_rect 810 125 199 50)) else ();;
+
 
 
 
 let lireSauvegarde blob =
-  try begin
-    let c = open_in "save.blob" in
-    let premiereLigne = input_line c in
-    if (int_of_string(premiereLigne) = 1) then (
-      grillesudokuB := input_line c;
-      nomjeu := input_line c;
-      Sudoku.vie := int_of_string(input_line c);
-      numerogrille := input_line c;
-      numerodifficultejeu := input_line c;
-      Sudoku.compteur := int_of_string(input_line c);
-      close_in c;
+  try
+    begin
+      let c = open_in "save.blob" in
+      let premiereLigne = input_line c in
+      if (int_of_string(premiereLigne) = 1) then (
+        grillesudokuB := input_line c;
+        nomjeu := input_line c;
+        Sudoku.vie := int_of_string(input_line c);
+        numerogrille := input_line c;
+        numerodifficultejeu := input_line c;
+        (* Sudoku.compteur := int_of_string(input_line c); *)
+        close_in c;
+        (* Sudoku.compteur := (Sudoku.compteZerogrille (!grillesudokuB)); *)
 
+        nonSauvegarde := false;
+        Graphics.clear_graph();
+        false
+      )else (true)
+      (* écrire sauvegarde inéxistante *)
 
-    )else (cleareffacersvg true;
-          )
-    (* écrire sauvegarde inéxistante *)
-
-  end
+    end
+  (* with End_of_file -> Printf.printf "end of file"; true; *)
   with
-  |_  -> (cleareffacersvg true; Graphics.moveto 275 145;Graphics.set_color (rgb 0 0 0);Graphics.set_font "-*-fixed-medium-r-*--12-*-*-*-*-*-iso8859-1";
-          Graphics.draw_string ("SAUVEGARDE CORROMPUE/NON TROUVEE"));;
+  (* écrire "sauvegarde corrompue" *)
+  |_  -> (cleareffacerchargerpartie true; Graphics.moveto 815 145;Graphics.set_color (rgb 0 0 0);Graphics.set_font "-*-fixed-medium-r-*--12-*-*-*-*-*-iso8859-1";
+          Graphics.draw_string ("SAUVEGARDE CORROMPUE/NON TROUVEE");(true));;
 (* écrire "sauvegarde non trouvée" *)
-
-
-
-
-
 
 (* Fonction du menu principale permettant de lire au clavier le nom, le numéro de grille ainsi que la difficulté tout en l'affichant à l'écran *)
 let reponseJ bool=
+  nonSauvegarde := true;
   if (bool = true) then (
 
     let ba = ref true in
@@ -132,8 +132,8 @@ let reponseJ bool=
           while (!nbNom > 0 && !encore) do
             begin
               Graphics.moveto !u 460; 
-              if Graphics.key_pressed () then (nbNom := (!nbNom - 1); let key = read_key () in ( Graphics.set_font "-*-fixed-medium-r-*--15-*-*-*-*-*-iso8859-1";Graphics.set_color (rgb 0 0 0);Graphics.draw_char key ; u:=!u +15;
-                                                                                                 nomjeu := !nomjeu ^ (String.make 1 (key))) ) 
+              if Graphics.key_pressed () then (nbNom := (!nbNom - 1); let key = read_key () in if (key !='a') then ( Graphics.set_font "-*-fixed-medium-r-*--15-*-*-*-*-*-iso8859-1";Graphics.set_color (rgb 0 0 0);Graphics.draw_char key ; u:=!u +15;
+                                                                                                                     nomjeu := !nomjeu ^ (String.make 1 (key))) else ()) 
 
               else if ((Graphics.button_down ()) && (snd (Graphics.mouse_pos ())) > 445 && (snd (Graphics.mouse_pos ())) < 495 && (fst (Graphics.mouse_pos ())) > 901 && (fst (Graphics.mouse_pos ())) < 951 ) then
                 begin nomjeu := "";nbNom := 10;u := 720; clearmenunom true;
@@ -214,12 +214,16 @@ let reponseJ bool=
           done
         end
 
-      |valide when (s.Graphics.mouse_y > 125 && s.Graphics.mouse_y < 175 && s.Graphics.mouse_x > 540 && s.Graphics.mouse_x < 740 )-> if (s.Graphics.mouse_x > 540 && s.Graphics.mouse_x < 740) then begin Graphics.clear_graph(); ba:= false end
-      |effacersauvegarde when (s.Graphics.mouse_y > 125 && s.Graphics.mouse_y < 175) -> if ( s.Graphics.mouse_x > 270 && s.Graphics.mouse_x < 470) then begin lireSauvegarde true end
+      |valide when (s.Graphics.mouse_y > 125 && s.Graphics.mouse_y < 175 && s.Graphics.mouse_x > 540 && s.Graphics.mouse_x < 740) -> begin Graphics.clear_graph(); ba:= false end
+      |effacerSauvegarde when (s.Graphics.mouse_y > 125 && s.Graphics.mouse_y < 175 && s.Graphics.mouse_x > 270 && s.Graphics.mouse_x < 470) -> ba := (lireSauvegarde true);
+      |chargeSauvegarde when (s.Graphics.mouse_y > 125 && s.Graphics.mouse_y < 175 && s.Graphics.mouse_x > 800 && s.Graphics.mouse_x < 1020)  ->  ba := (lireSauvegarde true) ;
       |_ -> ();
     done;
   ) else ()
 ;;
+
+
+
 
 
 (* Fonction referencemenu permettant de prendre des mesures si l'utilisateur ne rentre rien au clavier
@@ -230,24 +234,17 @@ let referencemenu bool =
   if (bool = true) then
     begin
       (if (!nomjeu = "") then nomjeu := "Bob" else ());
-      (if (!numerogrille = "" || (int_of_string(!numerogrille)) > 243) then ( let valrandom = (Random.int (243)) in (numerogrille := string_of_int(valrandom))) else ()) ;
-      (if ((!numerodifficultejeu = "") || (int_of_string(!numerodifficultejeu)) > 40) then (let valrandom = (Random.int (40)) in (numerodifficultejeu := string_of_int(valrandom)  ) ) else ());
+      (if (!numerogrille = "" || (int_of_string(!numerogrille) > 243)) then ( let valrandom = (Random.int (243)) in (numerogrille := string_of_int(valrandom))) else ()) ;
+      (if ((!numerodifficultejeu = "") || (int_of_string(!numerodifficultejeu) > 40)) then (let valrandom = (Random.int (40)) in (numerodifficultejeu := string_of_int(valrandom)  ) ) else ());
     end
 
-
+(* Fonction permettant lancer le menu en initialisant le compteur d'affichage en jeu *)
 let lancermenudebut bool =
-  if (bool = true) then (menuDebut true ; reponseJ true; referencemenu true; 
-                         (Sudoku.compteur :=  (20 +(int_of_string(!numerodifficultejeu))));) else ();;
-
-
-
+  if (bool = true) then (menuDebut true ; reponseJ true; referencemenu true;(if (!nonSauvegarde = true) then (Sudoku.compteur :=  (20 +(int_of_string(!numerodifficultejeu)))) else (Sudoku.compteur := (Sudoku.compteZerogrille (!grillesudokuB))))) else ();;
 
 
 (* On lance cette fonction *)
 lancermenudebut true;;
-
-
-
 
 
 (*  Fonction permettant de dessiner à l'écran le numéro que l'on attribue à la case de sudoku, uniquement au cas par cas  *)
@@ -289,7 +286,6 @@ let dessineGrille bool=
   for i = 0 to 8 do
     dessineRegion (100+(i mod 3)*3+(i mod 3)*165) (100+(i/3)*3+(i/3)*165);
   done;;
-
 
 
 
@@ -355,27 +351,28 @@ let getCaseCoord x y arraycasex arraycasey =
       end
   in test 0;;
 
-
 (* Même fonction permettant de lire la grille solution associée à la grille que l'utilisateur a demandé *)
-grillesudokuSol := (Sudoku.lecturesolution (int_of_string(!numerogrille)));;
+grillesudokuSol := (Sudoku.lecturesolution (int_of_string(!numerogrille)));
+if (!nonSauvegarde) then 
+  begin
 
 
-(* Même fonction permettant de lire la grille solution associée à la grille que l'utilisateur a demandé *)
-grillesudokuB := (Sudoku.lecturesolution (int_of_string(!numerogrille)));; 
+    (* Même fonction permettant de lire la grille solution associée à la grille que l'utilisateur a demandé *)
+    grillesudokuB := (Sudoku.lecturesolution (int_of_string(!numerogrille)));
 
-(* Valeur grille temporaire permettant de get en forme d'array la grille !grillesudokuB*)
-let grillesudokuBis = ref (getarrayfromgrille !grillesudokuB);;
+    (* Valeur grille temporaire permettant de get en forme d'array la grille !grillesudokuB*)
+    grillesudokuBis := (getarrayfromgrille !grillesudokuB);
 
-(* On applique la fonction retireChiffres du fichier sudoku.ml permettant de retirer le nombre de chiffres qu'on veut
-   Ici, plus on monte en difficulté, moins de chiffres seront supprimés
-*)
+    (* On applique la fonction retireChiffres du fichier sudoku.ml permettant de retirer le nombre de chiffres qu'on veut
+       Ici, plus on monte en difficulté, moins de chiffres seront supprimés
+    *)
 
-(Sudoku.retireChiffres ( (20 + int_of_string(!numerodifficultejeu))) (!grillesudokuBis)) ;;
-(Sudoku.compteur :=  (20 +(int_of_string(!numerodifficultejeu))));;
+    (Sudoku.retireChiffres ( (20 + int_of_string(!numerodifficultejeu))) (!grillesudokuBis));
+    (if (!nonSauvegarde = true) then (Sudoku.compteur :=  (20 +(int_of_string(!numerodifficultejeu)))) else (Sudoku.compteur := (Sudoku.compteZerogrille (!grillesudokuB))));
 
-(* Enfin, on récupère la grille associée plus haut avec la fonction getgrillefromarray *)
-let grillesudokuB = ref (getgrillefromarray !grillesudokuBis);;
-
+    (* Enfin, on récupère la grille associée plus haut avec la fonction getgrillefromarray *)
+    grillesudokuB := (getgrillefromarray !grillesudokuBis);
+  end;;
 
 (* Fonction qui retourne un doublet de coordonnées de l'ID de la case entrée en paramètre, elle est utilisée pour surbriller les cases *)
 let getRealPos idCase = 
@@ -431,6 +428,7 @@ let messagesettings bool =
                        Graphics.set_font "-*-fixed-medium-r-*--15-*-*-*-*-*-iso8859-1" ) else ();;
 
 
+
 (* Programme prenant en paramètre une grille sudoku et permettant de dessiner la grille,
    dessiner les valeurs des cases et d'initialiser le message et le messagevie pour le démarrage d'une partie *)
 let lancerprog grillesudoku =
@@ -440,8 +438,6 @@ let lancerprog grillesudoku =
   dessineSudoku grillesudoku ;
   messagesettings true;
   messagevie true;;
-
-
 
 
 let drawregles bool = Graphics.set_font "-*-fixed-medium-r-*--16-*-*-*-*-*-iso8859-1";Graphics.set_color (rgb 255 0 0);Graphics.moveto 630 350;
@@ -507,7 +503,7 @@ let jouerSudoku bool=
 
                                                                                                                                                                         else (  (if (key ='a') then () else (Sudoku.vie := !Sudoku.vie -1));draw_image (Image.init_image "cache_vie.ppm") 664 491;messagevie true; if !Sudoku.vie = 0 then (bool := false ;Sudoku.vie := 10; messageperdant true;)));
                if(key ='a') then ((val2 := (Sudoku.procedurealeatoire !arraygrilleJ arraygrilleSol) ); (dessineNb (!val2) (char_of_int(!arraygrilleJ.(!val2)+48));boolretourarriere := false);Sudoku.compteur := (!Sudoku.compteur -1);draw_image (Image.init_image "cache_vie.ppm") 664 491;messagevie true;
-                                  ( (Sudoku.vie := !Sudoku.vie -1);draw_image (Image.init_image "cache_vie.ppm") 664 491 ;messagevie true; if !Sudoku.vie = 0 then (bool := false ;Sudoku.vie := 10; messageperdant true; (Sudoku.compteur :=  (20 +(int_of_string(!numerodifficultejeu)))))) ) else ();
+                                  ( (Sudoku.vie := !Sudoku.vie -1);draw_image (Image.init_image "cache_vie.ppm") 664 491 ;messagevie true; if !Sudoku.vie = 0 then (bool := false ;Sudoku.vie := 10; messageperdant true; (if (!nonSauvegarde = true) then (Sudoku.compteur :=  (20 +(int_of_string(!numerodifficultejeu)))) else (Sudoku.compteur := (Sudoku.compteZerogrille (!grillesudokuB)))))) ) else ();
                if (!arraygrilleJ = arraygrilleSol) then (bool := false ;Sudoku.vie := 10; messagegagnant true ) else () )
 
             else  
@@ -536,7 +532,7 @@ let relancerletout bool =
     grillesudokuB := (Sudoku.lecturesolution (int_of_string(!numerogrille)));
     grillesudokuBis := (getarrayfromgrille !grillesudokuB);
     (Sudoku.retireChiffres ( (20 + int_of_string(!numerodifficultejeu))) (!grillesudokuBis)) ;
-    (Sudoku.compteur :=  (20 +(int_of_string(!numerodifficultejeu))));
+    (if (!nonSauvegarde = true) then (Sudoku.compteur :=  (20 +(int_of_string(!numerodifficultejeu)))) else (Sudoku.compteur := (Sudoku.compteZerogrille (!grillesudokuB))));
     grillesudokuB := (getgrillefromarray !grillesudokuBis);
     draw_image (Image.init_image "main_base.ppm") 0 0;
 
@@ -556,7 +552,7 @@ jouerSudoku true;;
 (* Fonction permettant de pouvoir recommencer la grille en cas de défaite *)
 let testbool = ref true in
 while (!testbool) do
-  let key = read_key () in (if (key = 'o') then ((Sudoku.compteur :=  (20 +(int_of_string(!numerodifficultejeu))));Graphics.clear_graph();lancerprog !grillesudokuB;jouerSudoku true) else if (key ='n') then (testbool := false;Graphics.clear_graph()) else (if (key ='q' ) then (exit 0) else ()) );
+  let key = read_key () in (if (key = 'o') then ((if (!nonSauvegarde = true) then (Sudoku.compteur :=  (20 +(int_of_string(!numerodifficultejeu)))) else (Sudoku.compteur := (Sudoku.compteZerogrille (!grillesudokuB))));Graphics.clear_graph();lancerprog !grillesudokuB;jouerSudoku true) else if (key ='n') then (testbool := false;Graphics.clear_graph()) else (if (key ='q' ) then (exit 0) else ()) );
 
 done;;
 
