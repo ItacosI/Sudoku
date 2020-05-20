@@ -16,7 +16,7 @@ let menuDebut bool=
 
 
   if(bool = true) then
-    (draw_image(Image.init_image "menu.ppm") 0 0) else ();;
+    (draw_image(Image.init_image "rsc/menu.ppm") 0 0) else ();;
 
 (* |grille when (s.Graphics.mouse_y > 345 && s.Graphics.mouse_y < 395 && s.Graphics.mouse_x > 700 && s.Graphics.mouse_x < 800 )-> *)
 
@@ -67,7 +67,7 @@ let effacersauvegarde bool =
   output_string c "0";
   close_out c;
   Printf.printf "yo";;
-
+let deuxiemevie = ref 0;;
 let lireSauvegarde blob =
   try
     begin
@@ -78,6 +78,8 @@ let lireSauvegarde blob =
 
         nomjeu := input_line c;
         Sudoku.vie := int_of_string(input_line c);
+        deuxiemevie := !Sudoku.vie;
+
         if(((!Sudoku.vie) <  0) || ((!Sudoku.vie) > 10)) then 
           (raise (Fichier_Corrompu))  else ();
         numerogrille := input_line c;
@@ -412,14 +414,14 @@ let dessineSelect idCase efface =
 
 let messageperdant bool =
   if bool = true then (Graphics.clear_graph();Graphics.set_font "-*-fixed-medium-r-*--30-*-*-*-*-*-iso8859-1";Graphics.set_color (rgb 255 255 255);
-                       draw_image (Image.init_image "game_over_bad.ppm") 0 0; Graphics.moveto 290 347; Graphics.draw_string (!nomjeu);
+                       draw_image (Image.init_image "rsc/game_over_bad.ppm") 0 0; Graphics.moveto 290 347; Graphics.draw_string (!nomjeu);
                        Graphics.moveto 688 347; Graphics.draw_string(string_of_int(!Sudoku.compteur));
                        Graphics.set_font "-*-fixed-medium-r-*--15-*-*-*-*-*-iso8859-1";) else ();;
 
 (* Idem que la fonction d'avant mais pour message gagnant *)
 let messagegagnant bool =
   if bool = true then (Graphics.clear_graph();Graphics.set_font "-*-fixed-medium-r-*--25-*-*-*-*-*-iso8859-1";Graphics.set_color (rgb 255 255 255);
-                       draw_image (Image.init_image "game_over_good.ppm") 0 0; Graphics.moveto 532 364; Graphics.draw_string (!nomjeu);
+                       draw_image (Image.init_image "rsc/game_over_good.ppm") 0 0; Graphics.moveto 532 364; Graphics.draw_string (!nomjeu);
                        Graphics.set_font "-*-fixed-medium-r-*--15-*-*-*-*-*-iso8859-1";) else ();;
 
 
@@ -447,11 +449,13 @@ let messagesettings bool =
 (* Programme prenant en paramètre une grille sudoku et permettant de dessiner la grille,
    dessiner les valeurs des cases et d'initialiser le message et le messagevie pour le démarrage d'une partie *)
 let lancerprog grillesudoku =
-  draw_image (Image.init_image "main_base.ppm") 0 0;
+  draw_image (Image.init_image "rsc/main_base.ppm") 0 0;
+  (* if (!nonSauvegarde = true) then (Sudoku.compteur :=  (20 +(int_of_string(!numerodifficultejeu)))) *)
 
   dessineGrille true;
   dessineSudoku grillesudoku ;
   messagesettings true;
+
   messagevie true;;
 
 
@@ -497,6 +501,7 @@ let jouerSudoku bool=
     let val2 = ref 0 in
 
 
+
     while (!encore ) do 
 
       begin 
@@ -506,16 +511,16 @@ let jouerSudoku bool=
               (var := getCaseCoord (fst !pos) (snd !pos) arraycasex arraycasey;encore := false; dessineSelect !var true;  
 
                if !var = -1 then () else if((staticarraygrille.(!var) = 0) && !arraygrilleJ.(!var) != 0 ) then () else if (staticarraygrille.(!var)!= 0) then () else ( if (arraygrilleSol.(!var) = (int_of_char(key)-48) )
-                                                                                                                                                                        then ( tempretourarriere := Array.copy !arraygrilleJ; !arraygrilleJ.(!var) <- (int_of_char(key)-48);(dessineNb (!var) key);boolretourarriere := true;Sudoku.compteur := (!Sudoku.compteur -1);draw_image (Image.init_image "cache_vie.ppm") 664 491;messagevie true)
+                                                                                                                                                                        then ( tempretourarriere := Array.copy !arraygrilleJ; !arraygrilleJ.(!var) <- (int_of_char(key)-48);(dessineNb (!var) key);boolretourarriere := true;Sudoku.compteur := (!Sudoku.compteur -1);draw_image (Image.init_image "rsc/cache_vie.ppm") 664 491;messagevie true)
 
-                                                                                                                                                                        else (  (if (key ='a') then () else (Sudoku.vie := !Sudoku.vie -1));draw_image (Image.init_image "cache_vie.ppm") 664 491;messagevie true; if !Sudoku.vie = 0 then (bool := false ;Sudoku.vie := 10; messageperdant true;)));
-               if(key ='a') then ((val2 := (Sudoku.procedurealeatoire !arraygrilleJ arraygrilleSol) ); (dessineNb (!val2) (char_of_int(!arraygrilleJ.(!val2)+48));boolretourarriere := false);Sudoku.compteur := (!Sudoku.compteur -1);draw_image (Image.init_image "cache_vie.ppm") 664 491;messagevie true;
-                                  ( (Sudoku.vie := !Sudoku.vie -1);draw_image (Image.init_image "cache_vie.ppm") 664 491 ;messagevie true; if !Sudoku.vie = 0 then (bool := false ;Sudoku.vie := 10; messageperdant true; (if (!nonSauvegarde = true) then (Sudoku.compteur :=  (20 +(int_of_string(!numerodifficultejeu)))) else (Sudoku.compteur := (Sudoku.compteZerogrille (!grillesudokuB)))))) ) else ();
+                                                                                                                                                                        else (  (if (key ='a') then () else (Sudoku.vie := !Sudoku.vie -1));draw_image (Image.init_image "rsc/cache_vie.ppm") 664 491;messagevie true; if !Sudoku.vie = 0 then (bool := false ;if (!nonSauvegarde = true ) then Sudoku.vie := 10 else (Sudoku.vie := !deuxiemevie); messageperdant true;)));
+               if(key ='a') then ((val2 := (Sudoku.procedurealeatoire !arraygrilleJ arraygrilleSol) ); (dessineNb (!val2) (char_of_int(!arraygrilleJ.(!val2)+48));boolretourarriere := false);Sudoku.compteur := (!Sudoku.compteur -1);draw_image (Image.init_image "rsc/cache_vie.ppm") 664 491;messagevie true;
+                                  ( (Sudoku.vie := !Sudoku.vie -1);draw_image (Image.init_image "rsc/cache_vie.ppm") 664 491 ;messagevie true; if !Sudoku.vie = 0 then (bool := false ;if (!nonSauvegarde = true) then Sudoku.vie := 10 else (Sudoku.vie := !deuxiemevie); messageperdant true; (if (!nonSauvegarde = true) then (Sudoku.compteur :=  (20 +(int_of_string(!numerodifficultejeu)))) else (Sudoku.compteur := (Sudoku.compteZerogrille (!grillesudokuB)))))) ) else ();
                if (!arraygrilleJ = arraygrilleSol) then (bool := false ;Sudoku.vie := 10; messagegagnant true ) else () )
 
             else  
 
-              (if (key ='e' && !boolretourarriere = true) then ( if ((!arraygrilleJ = staticarraygrille) || (!arraygrilleJ = !tempretourarriere)) then () else ((arraygrilleJ := Array.copy !tempretourarriere;tempgrilleretourarriere := (getgrillefromarray !arraygrilleJ) ;Graphics.clear_graph();lancerprog !tempgrilleretourarriere)))  else (if (key ='z' && !boolregles = true) then ((draw_image(Image.init_image "regle.ppm") 618 97);boolregles := false) else ( if (key ='z' && !boolregles = false) then ((draw_image(Image.init_image "cache_regle.ppm") 618 97);boolregles := true) else ())));
+              (if (key ='e' && !boolretourarriere = true) then (Sudoku.compteur := !Sudoku.compteur +1; if ((!arraygrilleJ = staticarraygrille) || (!arraygrilleJ = !tempretourarriere)) then () else ((arraygrilleJ := Array.copy !tempretourarriere;tempgrilleretourarriere := (getgrillefromarray !arraygrilleJ) ;Graphics.clear_graph();lancerprog !tempgrilleretourarriere)))  else (if (key ='z' && !boolregles = true) then ((draw_image(Image.init_image "rsc/regle.ppm") 618 97);boolregles := false) else ( if (key ='z' && !boolregles = false) then ((draw_image(Image.init_image "rsc/cache_regle.ppm") 618 97);boolregles := true) else ())));
 
           end
 
@@ -525,6 +530,7 @@ let jouerSudoku bool=
               sauvegarder arraygrilleJ;
               bool := false;
               exit 0;
+
             ) else (
               dessineSelect (getCaseCoord (fst !pos) (snd !pos) arraycasex arraycasey) true;
               pos := (Graphics.mouse_pos ());
@@ -565,7 +571,7 @@ let relancerletout bool =
         grillesudokuB := (getgrillefromarray !grillesudokuBis);
       end
     else ();
-    draw_image (Image.init_image "main_base.ppm") 0 0;
+    draw_image (Image.init_image "rsc/main_base.ppm") 0 0;
 
     dessineGrille true;
     dessineSudoku !grillesudokuB ;
